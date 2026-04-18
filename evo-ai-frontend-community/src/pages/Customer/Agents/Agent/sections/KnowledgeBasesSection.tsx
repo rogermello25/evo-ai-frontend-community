@@ -134,10 +134,9 @@ const KnowledgeBasesSection = ({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium truncate">{kb.name}</span>
-                        {kb.document_count !== undefined && (
+                        {kb.contentType && (
                           <Badge variant="outline" className="text-xs">
-                            {kb.document_count}{' '}
-                            {kb.document_count === 1 ? 'document' : 'documents'}
+                            {kb.contentType}
                           </Badge>
                         )}
                       </div>
@@ -145,20 +144,6 @@ const KnowledgeBasesSection = ({
                         <p className="text-sm text-muted-foreground truncate">
                           {kb.description}
                         </p>
-                      )}
-                      {kb.tags && kb.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {kb.tags.slice(0, 5).map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {kb.tags.length > 5 && (
-                            <Badge variant="secondary" className="text-xs">
-                              +{kb.tags.length - 5}
-                            </Badge>
-                          )}
-                        </div>
                       )}
                     </div>
                   </div>

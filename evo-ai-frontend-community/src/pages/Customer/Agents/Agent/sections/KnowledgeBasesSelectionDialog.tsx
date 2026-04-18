@@ -27,7 +27,6 @@ interface KnowledgeBasesSelectionDialogProps {
 const KnowledgeBasesSelectionDialog = ({
   open,
   onOpenChange,
-  agentId,
   linkedKnowledgeBaseIds,
   onLink,
 }: KnowledgeBasesSelectionDialogProps) => {
@@ -45,8 +44,8 @@ const KnowledgeBasesSelectionDialog = ({
     const loadKnowledgeBases = async () => {
       try {
         setIsLoading(true);
-        const response = await knowledgeService.listKnowledgeBases(1, 100);
-        setKnowledgeBases(response.data || []);
+        const data = await knowledgeService.listKnowledgeBases();
+        setKnowledgeBases(data || []);
       } catch (error) {
         console.error('Error loading knowledge bases:', error);
       } finally {
