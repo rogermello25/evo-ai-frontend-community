@@ -296,8 +296,38 @@ services:
       ORGANIZATION_NAME: ${ORGANIZATION_NAME:-Evo CRM}
       TOOLS_CACHE_ENABLED: "true"
       TOOLS_CACHE_TTL: 3600
+      KNOWLEDGE_SERVICE_URL: "http://evocrm_knowledge:8001/api/v1"
+      KNOWLEDGE_SERVICE_API_TOKEN: ${EVOAI_CRM_API_TOKEN}
+      MEMORY_ENABLED: "true"
+      MEMORY_SERVICE_TYPE: "http"
     volumes:
       - evo_processor_logs:/app/logs
+    networks:
+      - network_public
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == manager1
+      restart_policy:
+        condition: any
+
+  # ---------------------------------------------------------------------------
+  # Knowledge / Memory Service (Python / FastAPI) — Port 8001
+  # ---------------------------------------------------------------------------
+  evocrm_knowledge:
+    image: ghcr.io/rogermello25/evocrm/evo-knowledge-service:latest
+    environment:
+      DATABASE_URL: ${PROCESSOR_POSTGRES_CONNECTION_STRING}
+      SERVICE_TOKEN: ${EVOAI_CRM_API_TOKEN}
+      HOST: 0.0.0.0
+      PORT: "8001"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8001/health >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     networks:
       - network_public
     deploy:
