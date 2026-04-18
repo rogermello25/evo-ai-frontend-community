@@ -24,6 +24,10 @@ jobs:
     strategy:
       matrix:
         include:
+          - service: gateway
+            image: evo-gateway-fixed
+            context: ./nginx
+            dockerfile: ./nginx/Dockerfile
           - service: auth
             image: evo-auth-fixed
             context: ./evo-auth-service-community
@@ -44,6 +48,10 @@ jobs:
             image: evo-core-fixed
             context: ./evo-ai-core-service-community
             dockerfile: ./evo-ai-core-service-community/Dockerfile
+          - service: bot-runtime
+            image: evo-bot-runtime-fixed
+            context: ./evo-bot-runtime
+            dockerfile: ./evo-bot-runtime/Dockerfile
 
     steps:
       - uses: actions/checkout@v4
@@ -102,9 +110,11 @@ jobs:
             ## Docker Images
 
             ```bash
+            docker pull ghcr.io/rogermello25/evocrm/evo-gateway-fixed:${{ github.ref_name }}
             docker pull ghcr.io/rogermello25/evocrm/evo-auth-fixed:${{ github.ref_name }}
             docker pull ghcr.io/rogermello25/evocrm/evo-crm-fixed:${{ github.ref_name }}
             docker pull ghcr.io/rogermello25/evocrm/evo-frontend-fixed:${{ github.ref_name }}
             docker pull ghcr.io/rogermello25/evocrm/evo-processor-fixed:${{ github.ref_name }}
             docker pull ghcr.io/rogermello25/evocrm/evo-core-fixed:${{ github.ref_name }}
+            docker pull ghcr.io/rogermello25/evocrm/evo-bot-runtime-fixed:${{ github.ref_name }}
             ```

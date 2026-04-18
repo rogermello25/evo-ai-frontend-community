@@ -16,6 +16,8 @@ Este repositorio agora e a fonte canonica do stack `evocrm`.
 - `ghcr.io/rogermello25/evocrm/evo-frontend-fixed`
 - `ghcr.io/rogermello25/evocrm/evo-processor-fixed`
 - `ghcr.io/rogermello25/evocrm/evo-core-fixed`
+- `ghcr.io/rogermello25/evocrm/evo-gateway-fixed`
+- `ghcr.io/rogermello25/evocrm/evo-bot-runtime-fixed`
 
 ## Fluxo recomendado
 
@@ -31,10 +33,12 @@ Este repositorio agora e a fonte canonica do stack `evocrm`.
 ```bash
 cd /root/evocrm
 scripts/release-images.sh frontend v2026.04.18
+scripts/release-images.sh gateway v2026.04.18
 scripts/release-images.sh crm v2026.04.18
 scripts/release-images.sh auth v2026.04.18
 scripts/release-images.sh processor v2026.04.18
 scripts/release-images.sh core v2026.04.18
+scripts/release-images.sh bot-runtime v2026.04.18
 ```
 
 ## Deploy manual no Swarm
@@ -42,10 +46,12 @@ scripts/release-images.sh core v2026.04.18
 ```bash
 cd /root/evocrm
 scripts/deploy-swarm.sh frontend v2026.04.18
+scripts/deploy-swarm.sh gateway v2026.04.18
 scripts/deploy-swarm.sh crm v2026.04.18
 scripts/deploy-swarm.sh auth v2026.04.18
 scripts/deploy-swarm.sh processor v2026.04.18
 scripts/deploy-swarm.sh core v2026.04.18
+scripts/deploy-swarm.sh bot-runtime v2026.04.18
 ```
 
 ## Politica operacional

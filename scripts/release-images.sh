@@ -7,11 +7,16 @@ TAG="${2:-latest}"
 SERVICE="${1:-}"
 
 if [[ -z "$SERVICE" ]]; then
-  echo "usage: scripts/release-images.sh <auth|crm|frontend|processor|core> [tag]" >&2
+  echo "usage: scripts/release-images.sh <gateway|auth|crm|frontend|processor|core|bot-runtime> [tag]" >&2
   exit 1
 fi
 
 case "$SERVICE" in
+  gateway)
+    IMAGE="evo-gateway-fixed"
+    CONTEXT="$ROOT_DIR/nginx"
+    DOCKERFILE="$ROOT_DIR/nginx/Dockerfile"
+    ;;
   auth)
     IMAGE="evo-auth-fixed"
     CONTEXT="$ROOT_DIR/evo-auth-service-community"
@@ -36,6 +41,11 @@ case "$SERVICE" in
     IMAGE="evo-core-fixed"
     CONTEXT="$ROOT_DIR/evo-ai-core-service-community"
     DOCKERFILE="$ROOT_DIR/evo-ai-core-service-community/Dockerfile"
+    ;;
+  bot-runtime)
+    IMAGE="evo-bot-runtime-fixed"
+    CONTEXT="$ROOT_DIR/evo-bot-runtime"
+    DOCKERFILE="$ROOT_DIR/evo-bot-runtime/Dockerfile"
     ;;
   *)
     echo "unknown service: $SERVICE" >&2

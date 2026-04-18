@@ -6,7 +6,7 @@ TARGET="${1:-}"
 TAG="${2:-latest}"
 
 if [[ -z "$TARGET" ]]; then
-  echo "usage: scripts/deploy-swarm.sh <frontend|crm|auth|processor|core> [tag]" >&2
+  echo "usage: scripts/deploy-swarm.sh <gateway|frontend|crm|auth|processor|core|bot-runtime> [tag]" >&2
   exit 1
 fi
 
@@ -18,6 +18,9 @@ update_service() {
 }
 
 case "$TARGET" in
+  gateway)
+    update_service "evocrm_evocrm_gateway" "evo-gateway-fixed"
+    ;;
   frontend)
     update_service "evocrm_evocrm_frontend" "evo-frontend-fixed"
     ;;
@@ -34,6 +37,9 @@ case "$TARGET" in
     ;;
   core)
     update_service "evocrm_evocrm_core" "evo-core-fixed"
+    ;;
+  bot-runtime)
+    update_service "evocrm_evocrm_bot_runtime" "evo-bot-runtime-fixed"
     ;;
   *)
     echo "unknown target: $TARGET" >&2
