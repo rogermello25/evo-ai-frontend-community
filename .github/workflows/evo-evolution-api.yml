@@ -1,23 +1,25 @@
-name: Build and Push to GHCR
+name: Build Evolution API to GHCR
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - 'evolution-api/**'
 
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_NAME: ghcr.io/rogermello25/evocrm/evo-evolution-api
+
 jobs:
-  build_deploy:
-    name: Build and Push to GHCR
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
 
@@ -25,7 +27,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/rogermello25/evocrm/evo-evolution-api
+          images: ${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-
