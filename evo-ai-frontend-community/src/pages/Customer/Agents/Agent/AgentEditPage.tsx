@@ -28,6 +28,7 @@ import ConfigurationSection from './sections/ConfigurationSection';
 import ToolsSection from './sections/ToolsSection';
 import MCPServersSection from './sections/MCPServersSection';
 import IntegrationsSection from './sections/IntegrationsSection';
+import KnowledgeBasesSection from './sections/KnowledgeBasesSection';
 import AgentEditSidebar from './sections/AgentEditSidebar';
 import AgentEditHeader from './sections/AgentEditHeader';
 import AgentTestChat from '@/components/agents/AgentTestChat';
@@ -970,6 +971,9 @@ const AgentEditPage = () => {
             agentId={id || ''}
           />
         );
+
+      case 'knowledge':
+        return <KnowledgeBasesSection agentId={id || ''} />;
 
       case 'integrations':
         return (

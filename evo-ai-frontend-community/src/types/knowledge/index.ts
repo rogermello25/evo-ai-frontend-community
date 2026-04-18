@@ -1,4 +1,5 @@
-// CannedResponses Types
+// Knowledge Types
+export * from './knowledge';
 
 export interface CannedResponseAttachment {
   id: string;

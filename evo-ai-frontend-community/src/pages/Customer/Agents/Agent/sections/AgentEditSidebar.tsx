@@ -1,4 +1,4 @@
-import { User, Wrench, Plug, Server, Users, ListChecks, Settings } from 'lucide-react';
+import { User, Wrench, Plug, Server, Users, ListChecks, Settings, BookOpen } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Agent } from '@/types/agents';
 
@@ -78,6 +78,12 @@ const AgentEditSidebar = ({
         id: 'mcpServers',
         label: t('edit.menu.mcpServers') || 'Servidores MCP',
         icon: Server,
+        show: !isOrchestratorType && !isExternalType,
+      },
+      {
+        id: 'knowledge',
+        label: t('edit.menu.knowledge') || 'Knowledge Bases',
+        icon: BookOpen,
         show: !isOrchestratorType && !isExternalType,
       },
       {

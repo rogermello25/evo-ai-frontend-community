@@ -22,6 +22,7 @@ import {
   List,
   GraduationCap,
   Shield,
+  BookOpen,
 } from 'lucide-react';
 
 export interface MenuItem {
@@ -106,6 +107,13 @@ export const getCustomerMenuItems = (t: (key: string) => string): MenuItem[] => 
     href: '/automation',
     icon: Zap,
     resource: 'automation_rules',
+    action: 'read',
+  },
+  {
+    name: t('menu.customer.knowledge'),
+    href: '/knowledge',
+    icon: BookOpen,
+    resource: 'knowledge',
     action: 'read',
   },
   {

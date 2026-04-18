@@ -66,6 +66,7 @@ import HubSpotPage from '../pages/Customer/Settings/Integrations/HubSpotPage';
 import ShopifyPage from '../pages/Customer/Settings/Integrations/ShopifyPage';
 import LinearPage from '../pages/Customer/Settings/Integrations/LinearPage';
 import DashboardAppPage from '../pages/Customer/DashboardApp';
+import KnowledgeBaseList from '../pages/Customer/KnowledgeBaseList';
 // import { Overview, Conversations } from '../pages/Customer/Reports';
 // import * as Reports from '../pages/Customer/Reports';
 
@@ -525,6 +526,9 @@ const AppRouter = () => {
           <Route path="/channels" element={<PrivateRoute><CustomerRoute><MainLayout><PermissionRoute resource="channels" action="read"><Channels /></PermissionRoute></MainLayout></CustomerRoute></PrivateRoute>} />
           <Route path="/channels/new" element={<PrivateRoute><CustomerRoute><MainLayout><PermissionRoute resource="channels" action="create"><NewChannel /></PermissionRoute></MainLayout></CustomerRoute></PrivateRoute>} />
           <Route path="/channels/:channelId/settings" element={<PrivateRoute><CustomerRoute><MainLayout><PermissionRoute resource="channels" action="update"><ChannelSettings /></PermissionRoute></MainLayout></CustomerRoute></PrivateRoute>} />
+
+          {/* Knowledge */}
+          <Route path="/knowledge" element={<PrivateRoute><CustomerRoute><MainLayout><PermissionRoute resource="knowledge" action="read"><KnowledgeBaseList /></PermissionRoute></MainLayout></CustomerRoute></PrivateRoute>} />
 
           {/* Settings */}
           <Route path="/settings/account" element={<PrivateRoute><CustomerRoute><MainLayout><PermissionRoute resource="accounts" action="read"><AccountSettings /></PermissionRoute></MainLayout></CustomerRoute></PrivateRoute>} />

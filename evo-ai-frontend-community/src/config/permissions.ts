@@ -37,6 +37,7 @@ const RESOURCE_DEFINITIONS = [
   { key: 'ai_custom_mcp_servers', actions: ['read', 'create', 'update', 'delete'], category: 'agents' as const },
   { key: 'ai_mcp_servers', actions: ['read'], category: 'agents' as const },
   { key: 'ai_tools', actions: ['read'], category: 'agents' as const },
+  { key: 'knowledge', actions: ['read', 'create', 'update', 'delete'], category: 'agents' as const },
 
   // Settings
   { key: 'accounts', actions: ['read', 'update'], category: 'settings' as const },

@@ -761,3 +761,30 @@ model EvoaiSetting {
   Instance        Instance  @relation(fields: [instanceId], references: [id], onDelete: Cascade)
   instanceId      String    @unique
 }
+
+model KnowledgeBase {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  content     String   @db.Text
+  contentType String   @default("manual")
+  filePath    String?
+  fileName    String?
+  agentId     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  agentKnowledgeBases AgentKnowledgeBase[]
+}
+
+model AgentKnowledgeBase {
+  id              String   @id @default(uuid())
+  agentId         String
+  knowledgeBaseId String
+  createdAt       DateTime @default(now())
+
+  // agentId references Agent model in CRM Rails app (external)
+  knowledgeBase KnowledgeBase @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, knowledgeBaseId])
+}

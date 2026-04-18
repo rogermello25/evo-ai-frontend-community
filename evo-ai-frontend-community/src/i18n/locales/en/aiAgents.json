@@ -837,6 +837,24 @@
       },
       "comingSoon": "Coming soon..."
     },
+    "knowledgeBases": {
+      "title": "Knowledge Bases",
+      "subtitle": "Link knowledge bases to this agent for enhanced context",
+      "linkedKnowledgeBases": "Linked Knowledge Bases",
+      "noLinkedKnowledgeBases": "No knowledge bases linked",
+      "addKnowledgeBase": "Add Knowledge Base",
+      "loading": "Loading knowledge bases...",
+      "noKnowledgeBases": "No knowledge bases linked",
+      "addKnowledgeBaseDescription": "Add knowledge bases to give your agent access to specific information",
+      "selectKnowledgeBase": "Select Knowledge Base",
+      "selectKnowledgeBaseDescription": "Choose a knowledge base to link to this agent",
+      "searchPlaceholder": "Search knowledge bases...",
+      "noResults": "No knowledge bases match your search",
+      "noAvailableKnowledgeBases": "No available knowledge bases to link",
+      "tryDifferentSearch": "Try a different search term",
+      "linking": "Linking...",
+      "linkKnowledgeBase": "Link Knowledge Base"
+    },
     "tools": {
       "title": "Tools",
       "subtitle": "Configure available tools for the agent",
