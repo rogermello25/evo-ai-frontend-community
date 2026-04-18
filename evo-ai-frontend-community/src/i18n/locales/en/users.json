@@ -1,0 +1,236 @@
+{
+  "title": "Attendants",
+  "subtitle": "Manage your team and configure access permissions",
+  "loading": "Loading attendants...",
+  "card": {
+    "id": "ID",
+    "role": "Role",
+    "customRole": "Custom Role",
+    "actions": {
+      "chat": "Chat",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "details": {
+    "tabs": {
+      "overview": "Overview",
+      "activity": "Activity",
+      "settings": "Settings"
+    },
+    "status": {
+      "online": "Online",
+      "busy": "Busy",
+      "offline": "Offline",
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    },
+    "id": "ID",
+    "edit": "Edit",
+    "contactInfo": {
+      "title": "Contact Information",
+      "email": "Email:"
+    },
+    "rolePermissions": {
+      "title": "Role and Permissions",
+      "role": "Role:",
+      "availability": "Availability:"
+    },
+    "accountStatus": {
+      "title": "Account Status",
+      "confirmation": "Confirmation:",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "accountId": "Account ID:"
+    },
+    "timestamps": {
+      "title": "Timestamps",
+      "created": "Created:",
+      "lastUpdate": "Last Update:"
+    },
+    "activity": {
+      "placeholder": "Activity history will be implemented soon."
+    },
+    "settingsTab": {
+      "title": "Attendant Settings",
+      "systemRole": {
+        "title": "System Role",
+        "description": "Define the permissions and access of the attendant"
+      },
+      "availabilityStatus": {
+        "title": "Availability Status",
+        "description": "Indicates if the attendant is available to receive conversations"
+      },
+      "emailConfirmation": {
+        "title": "Email Confirmation",
+        "description": "Status of email verification",
+        "verified": "Verified",
+        "pending": "Pending"
+      },
+      "editSettings": "Edit Settings"
+    }
+  },
+  "form": {
+    "title": {
+      "create": "New Attendant",
+      "edit": "Edit Attendant"
+    },
+    "fields": {
+      "name": {
+        "label": "Name *",
+        "placeholder": "Attendant name"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "email@example.com",
+        "cannotChange": "The email cannot be changed after creation"
+      },
+      "role": {
+        "label": "Role *"
+      },
+      "availability": {
+        "label": "Availability Status",
+        "online": "Online",
+        "busy": "Busy",
+        "offline": "Offline"
+      },
+      "password": {
+        "label": "Password *",
+        "labelOptional": "New Password (optional)",
+        "placeholder": "••••••••"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password *",
+        "labelOptional": "Confirm New Password",
+        "placeholder": "••••••••"
+      }
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email invalid",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "save": "Save",
+      "create": "Create Attendant"
+    },
+    "messages": {
+      "createSuccess": "Attendant created successfully",
+      "updateSuccess": "Attendant updated successfully",
+      "saveError": "Error saving attendant"
+    }
+  },
+  "bulkInvite": {
+    "title": "Bulk Invite",
+    "resultTitle": "Result of Invites",
+    "howToUse": {
+      "title": "How to use:",
+      "step1": "Enter or paste a list of emails",
+      "step2": "One email per line or separated by comma",
+      "step3": "Duplicate emails will be automatically removed",
+      "step4": "Users will receive an invite email to create their account"
+    },
+    "fields": {
+      "emails": {
+        "label": "Attendants Emails",
+        "placeholder": "agent1@example.com\nagent2@example.com, agent3@example.com\nagent4@example.com",
+        "hint": "Paste a list of emails, one per line or separated by comma"
+      }
+    },
+    "results": {
+      "invited": "Invites Sent ({{count}})",
+      "failed": "Failed Invites ({{count}})"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "sendInvites": "Send Invites",
+      "sending": "Sending Invites...",
+      "sendMore": "Send More Invites",
+      "finish": "Finish"
+    },
+    "messages": {
+      "enterEmail": "Enter at least one email",
+      "noValidEmail": "No valid email found",
+      "allSuccess": "{{count}} invite(s) sent successfully",
+      "partialSuccess": "{{successCount}} invite(s) sent, {{failedCount}} failed",
+      "allFailed": "Failed to send {{count}} invite(s)",
+      "sendError": "Failed to send invites"
+    }
+  },
+  "filter": {
+    "title": "Filter Attendants",
+    "description": "Configure the filters to find the attendants you are looking for",
+    "applyFilters": "Apply Filters",
+    "clearFilters": "Clear Filters",
+    "addFilter": "Add Filter"
+  },
+  "header": {
+    "newUser": "New Attendant",
+    "bulkInvite": "Bulk Invite",
+    "export": "Export",
+    "delete": "Delete",
+    "searchPlaceholder": "Search by name, email or role..."
+  },
+  "table": {
+    "columns": {
+      "user": "Attendant",
+      "role": "Role",
+      "status": "Status",
+      "confirmation": "Confirmation",
+      "id": "ID",
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No attendants found",
+      "description": "Create your first attendant to start managing your team.",
+      "action": "New Attendant"
+    }
+  },
+  "messages": {
+    "permissionDenied": {
+      "read": "You don't have permission to view attendants",
+      "create": "You don't have permission to create attendants",
+      "update": "You don't have permission to edit attendants",
+      "delete": "You don't have permission to delete attendants",
+      "invite": "You don't have permission to invite attendants"
+    },
+    "loadError": "Error loading attendants",
+    "filterError": "Error applying filters",
+    "deleteSuccess": "Attendant deleted successfully",
+    "deleteError": "Error deleting attendant",
+    "bulkDeleteSuccess": "{{count}} attendant(s) deleted successfully",
+    "bulkDeleteError": "Error deleting attendants",
+    "availabilityUpdated": "Availability status updated"
+  },
+  "empty": {
+    "title": "No attendants found",
+    "description": "Create your first attendant to start managing your team.",
+    "action": "New Attendant"
+  },
+  "dialog": {
+    "delete": {
+      "title": "Delete Attendant",
+      "description": "Are you sure you want to delete the attendant \"{{name}}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "deleting": "Deleting...",
+      "confirm": "Delete"
+    },
+    "bulkDelete": {
+      "title": "Delete Attendants",
+      "description": "Are you sure you want to delete {{count}} attendant(s) selected? This action cannot be undone.",
+      "cancel": "Cancel",
+      "deleting": "Deleting...",
+      "confirm": "Delete All"
+    }
+  }
+}
