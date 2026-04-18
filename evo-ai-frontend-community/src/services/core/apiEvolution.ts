@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
 
 const apiEvolution = axios.create({

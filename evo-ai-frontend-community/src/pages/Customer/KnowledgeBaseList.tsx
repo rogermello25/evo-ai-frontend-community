@@ -392,7 +392,7 @@ export default function KnowledgeBaseList() {
                 {/* Tags */}
                 {kb.tags && kb.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-3">
-                    {kb.tags.map((tag, index) => (
+                    {kb.tags.map((tag: string, index: number) => (
                       <Badge key={index} variant="secondary" className="text-xs">
                         {tag}
                       </Badge>
@@ -403,10 +403,10 @@ export default function KnowledgeBaseList() {
                 {/* Footer info */}
                 <div className="flex items-center justify-between mt-4 pt-3 border-t text-xs text-muted-foreground">
                   <span>
-                    {kb.document_count || 0} {t('labels.documents')}
+                    {kb.contentType || 'manual'}
                   </span>
                   <span>
-                    {new Date(kb.created_at).toLocaleDateString()}
+                    {new Date(kb.createdAt).toLocaleDateString()}
                   </span>
                 </div>
               </div>
@@ -453,12 +453,12 @@ export default function KnowledgeBaseList() {
             </DialogDescription>
           </DialogHeader>
           <div className="max-h-64 overflow-auto">
-            {knowledgeBaseForAgents?.agent_ids && knowledgeBaseForAgents.agent_ids.length > 0 ? (
+            {linkedAgents[knowledgeBaseForAgents?.id || ''] && linkedAgents[knowledgeBaseForAgents?.id || ''].length > 0 ? (
               <ul className="space-y-2">
-                {knowledgeBaseForAgents.agent_ids.map((agentId) => (
-                  <li key={agentId} className="flex items-center gap-2 p-2 border rounded">
+                {linkedAgents[knowledgeBaseForAgents?.id || ''].map((link) => (
+                  <li key={link.agentId} className="flex items-center gap-2 p-2 border rounded">
                     <Link2 className="h-4 w-4" />
-                    <span className="text-sm">{agentId}</span>
+                    <span className="text-sm">{link.agentId}</span>
                   </li>
                 ))}
               </ul>
