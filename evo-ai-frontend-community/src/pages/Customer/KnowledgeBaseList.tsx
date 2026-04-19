@@ -119,8 +119,7 @@ export default function KnowledgeBaseList() {
       hasLoaded.current = true;
       loadKnowledgeBases();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [permissionsReady]);
+  }, [permissionsReady, loadKnowledgeBases]);
 
   // Filter knowledge bases based on search
   const filteredKnowledgeBases = state.knowledgeBases.filter(

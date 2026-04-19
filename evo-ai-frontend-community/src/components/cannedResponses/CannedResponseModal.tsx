@@ -281,7 +281,7 @@ export default function CannedResponseModal({
               onClick={(e) => updateSelection(e.currentTarget)}
               onKeyUp={(e) => updateSelection(e.currentTarget)}
               placeholder={t('modal.fields.content.placeholder')}
-              className={`resize-none min-h-[120px] ${errors.content ? 'border-destructive' : ''}`}
+              className={`resize-none min-h-[120px] max-h-[250px] overflow-y-auto ${errors.content ? 'border-destructive' : ''}`}
               rows={6}
             />
             {errors.content && (

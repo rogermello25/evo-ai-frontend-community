@@ -85,10 +85,12 @@ class PipelineStageAutomationService
       stage_autos = rule['stageAutomations']
       next unless stage_autos.is_a?(Array)
 
-      stage_autos.find do |stage_auto|
+      # Return the first matching stage automation
+      return stage_autos.find do |stage_auto|
         stage_auto['stageId'] == @new_stage.id.to_s || stage_auto['stageId'] == @new_stage.id
       end
     end
+    nil
   end
 
   def create_automatic_tasks(stage_automation)

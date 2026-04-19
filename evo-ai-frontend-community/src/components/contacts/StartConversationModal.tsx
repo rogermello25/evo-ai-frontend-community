@@ -654,6 +654,7 @@ export default function StartConversationModal({
                 rows={4}
                 required={!(isWhatsAppInbox && useTemplate)}
                 disabled={loading}
+                className="max-h-[200px] overflow-y-auto resize-none"
               />
               <p className="text-xs text-muted-foreground">
                 {t('startConversation.fields.message.characters', { count: message.length })}

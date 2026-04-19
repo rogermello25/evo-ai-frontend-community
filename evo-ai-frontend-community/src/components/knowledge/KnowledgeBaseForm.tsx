@@ -147,7 +147,7 @@ export default function KnowledgeBaseForm({
               value={formData.content || ''}
               onChange={(e) => handleInputChange('content', e.target.value)}
               placeholder={t('modal.placeholders.content')}
-              className="min-h-[120px] max-h-[300px] overflow-y-auto"
+              className="min-h-[120px] max-h-[250px] overflow-y-auto resize-none"
               rows={6}
             />
             <p className="text-xs text-muted-foreground">

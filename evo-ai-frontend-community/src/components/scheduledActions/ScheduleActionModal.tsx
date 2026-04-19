@@ -546,7 +546,7 @@ export function ScheduleActionModal({
                   }}
                   rows={5}
                   required
-                  className={errors.message ? 'border-red-500' : ''}
+                  className={`max-h-[250px] overflow-y-auto resize-none ${errors.message ? 'border-red-500' : ''}`}
                 />
                 {errors.message && <p className="text-sm text-red-500">{errors.message}</p>}
               </div>
@@ -622,6 +622,7 @@ export function ScheduleActionModal({
                   value={formData.task_description}
                   onChange={e => setFormData({ ...formData, task_description: e.target.value })}
                   rows={4}
+                  className="max-h-[200px] overflow-y-auto resize-none"
                 />
               </div>
             </>
