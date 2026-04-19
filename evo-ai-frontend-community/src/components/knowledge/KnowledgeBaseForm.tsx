@@ -98,7 +98,7 @@ export default function KnowledgeBaseForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isNew ? t('modal.title.create') : t('modal.title.edit')}
@@ -147,7 +147,7 @@ export default function KnowledgeBaseForm({
               value={formData.content || ''}
               onChange={(e) => handleInputChange('content', e.target.value)}
               placeholder={t('modal.placeholders.content')}
-              className="resize-none"
+              className="min-h-[120px] max-h-[300px] overflow-y-auto"
               rows={6}
             />
             <p className="text-xs text-muted-foreground">
