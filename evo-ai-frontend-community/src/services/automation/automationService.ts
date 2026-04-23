@@ -408,14 +408,14 @@ class AutomationService {
           // AddLabelNode usa label_list (array de IDs)
           return {
             action_name: 'add_label',
-            action_params: nodeData.label_list || [],
+            action_params: (nodeData.label_list as unknown[] | undefined) || [],
           };
 
         case 'remove-label-node':
           // RemoveLabelNode usa label_list (array de IDs)
           return {
             action_name: 'remove_label',
-            action_params: nodeData.label_list || [],
+            action_params: (nodeData.label_list as unknown[] | undefined) || [],
           };
 
         case 'send-message-node':
