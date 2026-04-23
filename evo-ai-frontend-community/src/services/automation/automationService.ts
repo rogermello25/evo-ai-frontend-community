@@ -6,21 +6,49 @@ import type {
   AutomationCondition,
   AutomationAction,
   AutomationFlowData,
+  AutomationFlowNode,
+  AutomationFlowEdge,
   CreateAutomationPayload,
   UpdateAutomationPayload,
   AutomationsResponse,
   AutomationResponse,
   AutomationDeleteResponse,
 } from '@/types/automation';
+import type { Inbox } from '@/types/channels/inbox';
+import type { User } from '@/types/users/users';
+import type { Team } from '@/types/users/teams';
+import type { Label } from '@/types/settings/labels';
+
+function getApiErrorMessage(error: unknown, fallback: string): string {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const resp = (error as { response?: { data?: { message?: string; error?: unknown } } }).response;
+    if (resp?.data?.message) return resp.data.message;
+  }
+  return fallback;
+}
+
+function getValidationError(error: unknown): string | null {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const resp = (error as { response?: { data?: { error?: Record<string, string | string[]> } } }).response;
+    if (resp?.data?.error && typeof resp.data.error === 'object') {
+      return Object.entries(resp.data.error)
+        .map(([field, messages]) =>
+          `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`
+        )
+        .join('; ');
+    }
+  }
+  return null;
+}
 
 class AutomationService {
   async getAutomations(): Promise<AutomationsResponse> {
     try {
       const response = await api.get('/automation_rules');
       return extractResponse<AutomationRule>(response) as AutomationsResponse;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao buscar automações:', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao buscar automações');
+      throw new Error(getApiErrorMessage(error, 'Erro ao buscar automações'));
     }
   }
 
@@ -28,9 +56,9 @@ class AutomationService {
     try {
       const response = await api.get(`/automation_rules/${id}`);
       return extractData<AutomationResponse>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao buscar automação:', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao buscar automação');
+      throw new Error(getApiErrorMessage(error, 'Erro ao buscar automação'));
     }
   }
 
@@ -60,22 +88,13 @@ class AutomationService {
       });
 
       return extractData<AutomationResponse>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao criar automação:', error);
-
-      if (error?.response?.data?.error) {
-        // Tratar erros de validação do backend
-        const errors = error.response.data.error;
-        const errorMessages = Object.entries(errors)
-          .map(
-            ([field, messages]: [string, any]) =>
-              `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`,
-          )
-          .join('; ');
-        throw new Error(`Erro de validação: ${errorMessages}`);
+      const validationErr = getValidationError(error);
+      if (validationErr) {
+        throw new Error(`Erro de validação: ${validationErr}`);
       }
-
-      throw new Error(error?.response?.data?.message || 'Erro ao criar automação');
+      throw new Error(getApiErrorMessage(error, 'Erro ao criar automação'));
     }
   }
 
@@ -84,7 +103,7 @@ class AutomationService {
     payload: Partial<UpdateAutomationPayload>,
   ): Promise<AutomationResponse> {
     try {
-      const updateData: any = { ...payload };
+      const updateData: Partial<UpdateAutomationPayload> & { id?: string } = { ...payload };
 
       // Remove o id do payload se estiver presente
       if ('id' in updateData) {
@@ -102,22 +121,13 @@ class AutomationService {
       const response = await api.put(`/automation_rules/${id}`, updateData);
 
       return extractData<AutomationResponse>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao atualizar automação:', error);
-
-      if (error?.response?.data?.error) {
-        // Tratar erros de validação do backend
-        const errors = error.response.data.error;
-        const errorMessages = Object.entries(errors)
-          .map(
-            ([field, messages]: [string, any]) =>
-              `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`,
-          )
-          .join('; ');
-        throw new Error(`Erro de validação: ${errorMessages}`);
+      const validationErr = getValidationError(error);
+      if (validationErr) {
+        throw new Error(`Erro de validação: ${validationErr}`);
       }
-
-      throw new Error(error?.response?.data?.message || 'Erro ao atualizar automação');
+      throw new Error(getApiErrorMessage(error, 'Erro ao atualizar automação'));
     }
   }
 
@@ -125,9 +135,9 @@ class AutomationService {
     try {
       const response = await api.delete(`/automation_rules/${id}`);
       return extractData<AutomationDeleteResponse>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao excluir automação:', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao excluir automação');
+      throw new Error(getApiErrorMessage(error, 'Erro ao excluir automação'));
     }
   }
 
@@ -135,20 +145,20 @@ class AutomationService {
     try {
       const response = await api.post(`/automation_rules/${id}/clone`);
       return extractData<AutomationResponse>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao clonar automação:', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao clonar automação');
+      throw new Error(getApiErrorMessage(error, 'Erro ao clonar automação'));
     }
   }
 
   // Métodos auxiliares para buscar dados necessários para o formulário
   async getFormData(): Promise<{
-    inboxes: any[];
-    agents: any[];
-    teams: any[];
-    labels: any[];
-    campaigns: any[];
-    customAttributes: any[];
+    inboxes: Inbox[];
+    agents: User[];
+    teams: Team[];
+    labels: Label[];
+    campaigns: unknown[];
+    customAttributes: unknown[];
   }> {
     try {
       const [inboxesRes, agentsRes, teamsRes, labelsRes] = await Promise.allSettled([
@@ -158,29 +168,26 @@ class AutomationService {
         api.get('/labels'),
       ]);
 
-      const getResultData = (result: PromiseSettledResult<any>, isAuthService = false): any[] => {
+      function getResultData<T>(result: PromiseSettledResult<unknown>): T[] {
         if (result.status === 'fulfilled') {
-          const data = extractData<{ users?: any[] } | any[]>(result.value);
-          if (isAuthService) {
-            if (data && typeof data === 'object' && 'users' in data && Array.isArray(data.users)) {
-              return data.users;
-            }
-            return Array.isArray(data) ? data : [];
+          const data = extractData<T[] | { users?: T[] }>(result.value as Parameters<typeof extractData>[0]);
+          if (Array.isArray(data)) return data;
+          if (data && typeof data === 'object' && 'users' in data && Array.isArray(data.users)) {
+            return data.users;
           }
-          return Array.isArray(data) ? data : [];
         }
         return [];
-      };
+      }
 
       return {
-        inboxes: getResultData(inboxesRes),
-        agents: getResultData(agentsRes, true), // true = isAuthService
-        teams: getResultData(teamsRes),
-        labels: getResultData(labelsRes),
+        inboxes: getResultData<Inbox>(inboxesRes),
+        agents: getResultData<User>(agentsRes),
+        teams: getResultData<Team>(teamsRes),
+        labels: getResultData<Label>(labelsRes),
         campaigns: [],
-        customAttributes: [], // TODO: Implementar busca de custom attributes se necessário
+        customAttributes: [],
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao buscar dados do formulário:', error);
       // Retornar dados vazios em caso de erro para não quebrar o formulário
       return {
@@ -207,9 +214,9 @@ class AutomationService {
       });
 
       return extractData<string>(response);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao fazer upload do arquivo:', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao fazer upload do arquivo');
+      throw new Error(getApiErrorMessage(error, 'Erro ao fazer upload do arquivo'));
     }
   }
 
@@ -231,7 +238,7 @@ class AutomationService {
 
       // 1. Procurar pelo TriggerNode no flow
       const triggerNode = flowData.nodes?.find(
-        (node: any) => node.type === 'trigger-node' || node.id === 'trigger-node',
+        (node) => (node.type as string) === 'trigger-node' || node.id === 'trigger-node',
       );
 
       if (triggerNode && triggerNode.data) {
@@ -252,7 +259,7 @@ class AutomationService {
           Array.isArray(triggerData.conditions) &&
           triggerData.conditions.length > 0
         ) {
-          result.conditions = triggerData.conditions.map((condition: any) => ({
+          result.conditions = triggerData.conditions.map((condition) => ({
             attribute_key: condition.attribute_key || '',
             filter_operator: condition.filter_operator || 'equal_to',
             values: Array.isArray(condition.values) ? condition.values : [],
@@ -289,7 +296,7 @@ class AutomationService {
       // Ordenar nodes seguindo a sequência das conexões a partir do trigger
       const orderedNodes = this.getOrderedActionNodes(nodes, edges);
 
-      orderedNodes.forEach((node: any) => {
+      orderedNodes.forEach((node) => {
         const action = this.convertNodeToAction(node);
         if (action) {
           actions.push(action);
@@ -309,8 +316,8 @@ class AutomationService {
    * Ordena os nodes de action seguindo a sequência das conexões
    * Suporta múltiplas conexões de um mesmo node (bifurcações)
    */
-  private getOrderedActionNodes(nodes: any[], edges: any[]): any[] {
-    const orderedNodes: any[] = [];
+  private getOrderedActionNodes(nodes: AutomationFlowNode[], edges: AutomationFlowEdge[]): AutomationFlowNode[] {
+    const orderedNodes: AutomationFlowNode[] = [];
     const visited = new Set<string>();
 
     // Função recursiva para traversar o grafo
@@ -323,15 +330,15 @@ class AutomationService {
       visited.add(nodeId);
 
       // Encontrar TODOS os edges que saem deste node
-      const outgoingEdges = edges.filter((edge: any) => edge.source === nodeId);
+      const outgoingEdges = edges.filter((edge) => edge.source === nodeId);
 
       if (outgoingEdges.length === 0) {
         return; // Fim da cadeia
       }
 
       // Processar todos os nodes conectados
-      outgoingEdges.forEach((edge: any) => {
-        const nextNode = nodes.find((node: any) => node.id === edge.target);
+      outgoingEdges.forEach((edge) => {
+        const nextNode = nodes.find((node) => node.id === edge.target);
         if (!nextNode) return;
 
         // Se for um action node, adicionar à lista
@@ -377,7 +384,7 @@ class AutomationService {
   /**
    * Converte um node do flow para o formato de action esperado pelo backend
    */
-  private convertNodeToAction(node: any): AutomationAction | null {
+  private convertNodeToAction(node: AutomationFlowNode): AutomationAction | null {
     try {
       const nodeType = node.type;
       const nodeData = node.data || {};
@@ -420,8 +427,8 @@ class AutomationService {
 
         case 'send-attachment-node': {
           // SendAttachmentNode usa attachment_ids, blob_ids (fallback) e inboxId opcional
-          const attachmentParams: any = {
-            attachment_ids: nodeData.attachment_ids || nodeData.blob_ids || [],
+          const attachmentParams: { attachment_ids: unknown[]; inbox_id?: unknown } = {
+            attachment_ids: (nodeData.attachment_ids as unknown[] | undefined) || (nodeData.blob_ids as unknown[] | undefined) || [],
           };
 
           // Adicionar inboxId se especificado
