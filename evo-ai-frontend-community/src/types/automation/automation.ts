@@ -27,7 +27,7 @@ export interface AutomationCondition {
 // Automation action interface (existing)
 export interface AutomationAction {
   action_name: string;
-  action_params: string[] | Record<string, unknown>;
+  action_params: unknown[] | Record<string, unknown>;
 }
 
 // Automation file interface (existing)
@@ -89,7 +89,7 @@ export interface AutomationConditionNodeData extends Record<string, unknown> {
 export interface AutomationActionNodeData extends Record<string, unknown> {
   type: 'action';
   action_name: string;
-  action_params: string[] | Record<string, unknown>;
+  action_params: unknown[] | Record<string, unknown>;
   label: string;
 }
 

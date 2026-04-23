@@ -386,7 +386,7 @@ class AutomationService {
    */
   private convertNodeToAction(node: AutomationFlowNode): AutomationAction | null {
     try {
-      const nodeType = node.type;
+      const nodeType = node.type as string;
       const nodeData = node.data || {};
 
       switch (nodeType) {
