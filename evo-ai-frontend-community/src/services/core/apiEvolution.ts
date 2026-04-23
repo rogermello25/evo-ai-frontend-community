@@ -5,6 +5,9 @@ const apiEvolution = axios.create({
   baseURL: `${import.meta.env.VITE_EVOLUTION_API_URL}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
+    ...(import.meta.env.VITE_EVOLUTION_API_KEY
+      ? { apikey: import.meta.env.VITE_EVOLUTION_API_KEY }
+      : {}),
   },
 });
 
