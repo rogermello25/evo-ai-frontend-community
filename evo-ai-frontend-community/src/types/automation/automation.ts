@@ -49,7 +49,7 @@ export interface AutomationFlowData {
 
 // Extended Node interface for automation specific data
 export interface AutomationFlowNode extends Node {
-  type: 'trigger' | 'condition' | 'action' | 'variable';
+  type: string;
   data: AutomationNodeData;
 }
 

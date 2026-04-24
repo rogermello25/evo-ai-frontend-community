@@ -238,7 +238,7 @@ class AutomationService {
 
       // 1. Procurar pelo TriggerNode no flow
       const triggerNode = flowData.nodes?.find(
-        (node) => (node.type as string) === 'trigger-node' || node.id === 'trigger-node',
+        (node) => node.type === 'trigger-node' || node.id === 'trigger-node',
       );
 
       if (triggerNode && triggerNode.data) {
@@ -386,7 +386,7 @@ class AutomationService {
    */
   private convertNodeToAction(node: AutomationFlowNode): AutomationAction | null {
     try {
-      const nodeType = node.type as string;
+      const nodeType = node.type;
       const nodeData = node.data || {};
 
       switch (nodeType) {
@@ -408,14 +408,14 @@ class AutomationService {
           // AddLabelNode usa label_list (array de IDs)
           return {
             action_name: 'add_label',
-            action_params: (nodeData.label_list as unknown[] | undefined) || [],
+            action_params: Array.isArray(nodeData.label_list) ? nodeData.label_list : [],
           };
 
         case 'remove-label-node':
           // RemoveLabelNode usa label_list (array de IDs)
           return {
             action_name: 'remove_label',
-            action_params: (nodeData.label_list as unknown[] | undefined) || [],
+            action_params: Array.isArray(nodeData.label_list) ? nodeData.label_list : [],
           };
 
         case 'send-message-node':
@@ -428,7 +428,7 @@ class AutomationService {
         case 'send-attachment-node': {
           // SendAttachmentNode usa attachment_ids, blob_ids (fallback) e inboxId opcional
           const attachmentParams: { attachment_ids: unknown[]; inbox_id?: unknown } = {
-            attachment_ids: (nodeData.attachment_ids as unknown[] | undefined) || (nodeData.blob_ids as unknown[] | undefined) || [],
+            attachment_ids: Array.isArray(nodeData.attachment_ids) ? nodeData.attachment_ids : Array.isArray(nodeData.blob_ids) ? nodeData.blob_ids : [],
           };
 
           // Adicionar inboxId se especificado
