@@ -36,18 +36,17 @@ const OPERATOR_OPTIONS: { value: string; label: string }[] = [
   { value: 'is_not_in', label: 'Não está em' },
 ];
 
-// Condition attribute keys that need special dropdown handling
+// Condition attribute keys — values must match backend conditions_attributes whitelist exactly
 const CONDITION_KEYS = [
-  { value: 'contact.name', label: 'Nome do Contato' },
-  { value: 'contact.email', label: 'Email do Contato' },
-  { value: 'contact.phone', label: 'Telefone do Contato' },
-  { value: 'contact.tags', label: 'Tags do Contato' },
-  { value: 'conversation.status', label: 'Status da Conversa' },
-  { value: 'conversation.priority', label: 'Prioridade da Conversa' },
-  { value: 'conversation.assignee_id', label: 'Agente Responsável' },
-  { value: 'conversation.team_id', label: 'Equipe' },
-  { value: 'message.content', label: 'Conteúdo da Mensagem' },
-  { value: 'message.attachment_count', label: 'Quantidade de Anexos' },
+  { value: 'name', label: 'Nome do Contato' },
+  { value: 'email', label: 'Email do Contato' },
+  { value: 'phone_number', label: 'Telefone do Contato' },
+  { value: 'labels', label: 'Tags do Contato' },
+  { value: 'status', label: 'Status da Conversa' },
+  { value: 'priority', label: 'Prioridade da Conversa' },
+  { value: 'assignee_id', label: 'Agente Responsável' },
+  { value: 'team_id', label: 'Equipe' },
+  { value: 'content', label: 'Conteúdo da Mensagem' },
 ];
 
 // Action types
@@ -96,18 +95,18 @@ interface FormData {
 }
 
 
-// Get dropdown type for attribute
+// Get dropdown type for attribute (keys are backend whitelist values)
 const getDropdownType = (attributeKey: string): 'labels' | 'agents' | 'teams' | 'status' | 'priority' | null => {
   switch (attributeKey) {
-    case 'contact.tags':
+    case 'labels':
       return 'labels';
-    case 'conversation.status':
+    case 'status':
       return 'status';
-    case 'conversation.priority':
+    case 'priority':
       return 'priority';
-    case 'conversation.assignee_id':
+    case 'assignee_id':
       return 'agents';
-    case 'conversation.team_id':
+    case 'team_id':
       return 'teams';
     default:
       return null;

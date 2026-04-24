@@ -93,10 +93,9 @@ export function useIntegrations(agentId: string): UseIntegrationsReturn {
 
     try {
       // Same endpoint as MCP integrations - returns configs and credentials_configured
-      const {
-        configs,
-        credentials_configured,
-      } = await agentIntegrationsService.getAgentIntegrations(agentId);
+      const response = await agentIntegrationsService.getAgentIntegrations(agentId);
+      const configs = response?.configs ?? {};
+      const credentials_configured = response?.credentials_configured;
 
       // Normalize credentials_configured to use hyphen format (google-calendar instead of google_calendar)
       const normalizedCredentials: Record<string, boolean> = {};

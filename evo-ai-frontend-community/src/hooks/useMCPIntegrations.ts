@@ -119,10 +119,9 @@ export function useMCPIntegrations(agentId: string): UseMCPIntegrationsReturn {
     setIsCheckingCredentials(true);
 
     try {
-      const {
-        configs,
-        credentials_configured,
-      } = await agentIntegrationsService.getAgentIntegrations(agentId);
+      const response = await agentIntegrationsService.getAgentIntegrations(agentId);
+      const configs = response?.configs ?? {};
+      const credentials_configured = response?.credentials_configured;
 
       setCredentialsConfigured(credentials_configured || {});
 

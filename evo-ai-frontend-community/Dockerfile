@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Accept build-time secret (apikey baked into bundle)
+ARG VITE_EVOLUTION_API_KEY
+
 # Copy package files
 COPY package.json package-lock.json ./
 
@@ -12,7 +15,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application — URLs injected at runtime via docker-entrypoint.sh
+ENV VITE_EVOLUTION_API_KEY=$VITE_EVOLUTION_API_KEY
+
+# Build — runtime URLs injected at container start via docker-entrypoint.sh
 RUN npm run build
 
 # Production stage

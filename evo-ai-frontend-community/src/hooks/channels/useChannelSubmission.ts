@@ -18,6 +18,11 @@ import {
   WhatsappNotificamePayload,
   WhatsappZapiPayload,
   Inbox,
+  EvolutionConnectionParams,
+  EvolutionGoConnectionParams,
+  EvolutionProviderConfig,
+  EvolutionGoProviderConfig,
+  ChannelSubmitConfig,
 } from '@/types/channels/inbox';
 import EvolutionService from '@/services/channels/evolutionService';
 import EvolutionGoService from '@/services/channels/evolutionGoService';
@@ -90,7 +95,7 @@ export const useChannelSubmission = (form?: FormData) => {
 
         try {
           // Build verify payload
-          const verifyPayload: any = {
+          const verifyPayload: EvolutionConnectionParams = {
             instanceName: getStr(form, 'instance_name') || getStr(form, 'name'),
             phoneNumber: getStr(form, 'phone_number'),
             proxySettings: form.proxy_enabled
@@ -156,7 +161,7 @@ export const useChannelSubmission = (form?: FormData) => {
 
         try {
           // Build verify payload
-          const verifyPayload: any = {
+          const verifyPayload: EvolutionGoConnectionParams = {
             instanceName: getStr(form, 'instance_name') || getStr(form, 'name'),
             phoneNumber: getStr(form, 'phone_number'),
             mode: 'test',
@@ -249,7 +254,7 @@ export const useChannelSubmission = (form?: FormData) => {
     selectedChannel: ChannelType,
     selectedProvider: ProviderType | null,
     form: FormData,
-    config: any,
+    config: ChannelSubmitConfig,
   ) => {
     if (!selectedChannel) return;
 
@@ -500,7 +505,7 @@ export const useChannelSubmission = (form?: FormData) => {
             }
 
             // verify connection
-            const verifyPayload: any = {
+            const verifyPayload: EvolutionConnectionParams = {
               instanceName: getStr(form, 'instance_name') || getStr(form, 'name'),
               phoneNumber: getStr(form, 'phone_number'),
               proxySettings: form.proxy_enabled
@@ -523,18 +528,16 @@ export const useChannelSubmission = (form?: FormData) => {
                 readStatus: !!form.readStatus,
                 enable_sync_features: !!form.enable_sync_features,
               },
+              ...(!useGlobalConfig && {
+                apiUrl: getStr(form, 'api_url'),
+                adminToken: getStr(form, 'admin_token'),
+              }),
             };
-
-            // 🔒 SECURITY: Only send api_url/admin_token if NOT using global config
-            if (!useGlobalConfig) {
-              verifyPayload.apiUrl = getStr(form, 'api_url');
-              verifyPayload.adminToken = getStr(form, 'admin_token');
-            }
 
             await EvolutionService.verifyConnection(verifyPayload);
 
             // Build final payload
-            const providerConfig: any = {
+            const providerConfig: EvolutionProviderConfig = {
               instance_name: getStr(form, 'name'),
               proxy_settings: form.proxy_enabled
                 ? {
@@ -556,13 +559,11 @@ export const useChannelSubmission = (form?: FormData) => {
                 readStatus: !!form.readStatus,
                 enable_sync_features: !!form.enable_sync_features,
               },
+              ...(!useGlobalConfig && {
+                api_url: getStr(form, 'api_url'),
+                admin_token: getStr(form, 'admin_token'),
+              }),
             };
-
-            // 🔒 SECURITY: Only send api_url/admin_token if NOT using global config
-            if (!useGlobalConfig) {
-              providerConfig.api_url = getStr(form, 'api_url');
-              providerConfig.admin_token = getStr(form, 'admin_token');
-            }
 
             payload = {
               name: getStr(form, 'name') || 'WhatsApp Evolution',
@@ -595,7 +596,7 @@ export const useChannelSubmission = (form?: FormData) => {
             }
 
             // verify connection first
-            const verifyPayload: any = {
+            const verifyPayload: EvolutionGoConnectionParams = {
               instanceName: getStr(form, 'instance_name') || getStr(form, 'name'),
               phoneNumber: getStr(form, 'phone_number'),
               mode: 'create',
@@ -606,13 +607,11 @@ export const useChannelSubmission = (form?: FormData) => {
                 ignoreGroups: !!form.ignoreGroups,
                 ignoreStatus: !!form.ignoreStatus,
               },
+              ...(!useGlobalConfig && {
+                apiUrl: getStr(form, 'api_url'),
+                adminToken: getStr(form, 'admin_token'),
+              }),
             };
-
-            // 🔒 SECURITY: Only send api_url/admin_token if NOT using global config
-            if (!useGlobalConfig) {
-              verifyPayload.apiUrl = getStr(form, 'api_url');
-              verifyPayload.adminToken = getStr(form, 'admin_token');
-            }
 
             const verify = await EvolutionGoService.verifyConnection(verifyPayload);
 
@@ -625,7 +624,7 @@ export const useChannelSubmission = (form?: FormData) => {
             }
 
             // Build final payload
-            const providerConfig: any = {
+            const providerConfig: EvolutionGoProviderConfig = {
               instance_name: getStr(form, 'instance_name') || getStr(form, 'name'),
               instance_uuid: verify?.instance_uuid || getStr(form, 'instance_uuid'),
               instance_token: verify?.instance_token || getStr(form, 'instance_token'),
@@ -634,13 +633,11 @@ export const useChannelSubmission = (form?: FormData) => {
               read_messages: !!form.readMessages,
               ignore_groups: !!form.ignoreGroups,
               ignore_status: !!form.ignoreStatus,
+              ...(!useGlobalConfig && {
+                api_url: getStr(form, 'api_url'),
+                admin_token: getStr(form, 'admin_token'),
+              }),
             };
-
-            // 🔒 SECURITY: Only send api_url/admin_token if NOT using global config
-            if (!useGlobalConfig) {
-              providerConfig.api_url = getStr(form, 'api_url');
-              providerConfig.admin_token = getStr(form, 'admin_token');
-            }
 
             payload = {
               name: getStr(form, 'name') || 'WhatsApp Evolution Go',
