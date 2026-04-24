@@ -11,6 +11,10 @@ import type {
   MacroExecuteData,
   MacrosListParams,
 } from '@/types/automation';
+import type { Inbox } from '@/types/channels/inbox';
+import type { User } from '@/types/users/users';
+import type { Team } from '@/types/users/teams';
+import type { Label } from '@/types/settings/labels';
 
 class MacrosService {
   // List macros with optional parameters
@@ -57,12 +61,12 @@ class MacrosService {
   }
 
   async getFormData(): Promise<{
-    inboxes: any[];
-    agents: any[];
-    teams: any[];
-    labels: any[];
-    campaigns: any[];
-    customAttributes: any[];
+    inboxes: Inbox[];
+    agents: User[];
+    teams: Team[];
+    labels: Label[];
+    campaigns: unknown[];
+    customAttributes: unknown[];
   }> {
     try {
       // Buscar dados necessários para o formulário em paralelo
@@ -73,28 +77,27 @@ class MacrosService {
         api.get('/labels'),
       ]);
 
-      const getResultData = (result: PromiseSettledResult<any>, isAuthService = false): any[] => {
+      function getResultData<T>(result: PromiseSettledResult<unknown>, isAuthService = false): T[] {
         if (result.status === 'fulfilled') {
           if (isAuthService) {
-            // Auth services return {data, meta} structure
-            const response = extractResponse(result.value);
-            return (response.data as any[]) || [];
+            const response = extractResponse(result.value as Parameters<typeof extractResponse>[0]);
+            return (response.data as T[]) || [];
           }
-          const data = extractData(result.value);
+          const data = extractData<T[] | T>(result.value as Parameters<typeof extractData>[0]);
           return Array.isArray(data) ? data : [];
         }
         return [];
-      };
+      }
 
       return {
-        inboxes: getResultData(inboxesRes),
-        agents: getResultData(agentsRes, true), // true = isAuthService
-        teams: getResultData(teamsRes),
-        labels: getResultData(labelsRes),
+        inboxes: getResultData<Inbox>(inboxesRes),
+        agents: getResultData<User>(agentsRes, true),
+        teams: getResultData<Team>(teamsRes),
+        labels: getResultData<Label>(labelsRes),
         campaigns: [],
-        customAttributes: [], // TODO: Implementar busca de custom attributes se necessário
+        customAttributes: [],
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao buscar dados do formulário:', error);
       // Retornar dados vazios em caso de erro para não quebrar o formulário
       return {

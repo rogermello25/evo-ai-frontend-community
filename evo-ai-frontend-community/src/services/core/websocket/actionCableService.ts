@@ -1,5 +1,6 @@
 import { createConsumer, Consumer, Subscription } from '@rails/actioncable';
 import { getConfig } from '@/lib/runtimeConfig';
+import { logError, logWarn } from '@/utils/telemetry';
 
 class ActionCableService {
   private consumer: Consumer | null = null;
@@ -48,7 +49,7 @@ class ActionCableService {
           this.handleDisconnection();
         },
 
-        received: (data: any) => {
+        received: (data: unknown) => {
           this.handleEventMessage(data);
         },
       },
@@ -67,8 +68,8 @@ class ActionCableService {
   //   // No separate PresenceChannel needed
   // }
 
-  private handleEventMessage(data: any) {
-    const { event, payload } = data;
+  private handleEventMessage(data: unknown) {
+    const { event, payload } = data as { event: string; payload: unknown };
 
     // Dispatch events based on type
     switch (event) {
@@ -140,16 +141,16 @@ class ActionCableService {
       this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000);
       this.reconnectAttempts++;
     } else {
-      console.error('Max reconnection attempts reached');
+      logError('WebSocket', new Error('Max reconnection attempts reached'), {
+        attempts: this.reconnectAttempts,
+      });
       window.dispatchEvent(new CustomEvent('evolution:connection_failed'));
     }
   }
 
   private reconnect() {
     if (this.pubsubToken && this.userId) {
-      console.error(
-        `Reconnection attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts}`,
-      );
+      logWarn('WebSocket', `Reconnection attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts}`);
       this.disconnect();
       this.init(this.pubsubToken, this.userId);
     }
@@ -160,7 +161,7 @@ class ActionCableService {
 
     // Check if any subscription is connected
     for (const subscription of this.subscriptions.values()) {
-      if (subscription && (subscription as any).consumer) {
+      if (subscription && 'consumer' in subscription && subscription.consumer) {
         return true;
       }
     }

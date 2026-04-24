@@ -538,8 +538,8 @@ export interface WhatsappChannel {
 // ============================================
 
 export interface EvolutionConnectionParams {
-  apiUrl: string;
-  adminToken: string;
+  apiUrl?: string;
+  adminToken?: string;
   instanceName: string;
   phoneNumber: string;
   proxySettings?: {
@@ -575,8 +575,8 @@ export interface EvolutionAuthorizationResponse {
 // ============================================
 
 export interface EvolutionGoConnectionParams {
-  apiUrl: string;
-  adminToken: string;
+  apiUrl?: string;
+  adminToken?: string;
   instanceName: string;
   phoneNumber: string;
   mode?: 'test' | 'create';
@@ -595,6 +595,8 @@ export interface EvolutionGoConnectionParams {
     readMessages?: boolean;
     syncFullHistory?: boolean;
     readStatus?: boolean;
+    ignoreGroups?: boolean;
+    ignoreStatus?: boolean;
   };
 }
 
@@ -605,6 +607,55 @@ export interface EvolutionGoAuthorizationResponse {
   qrcode?: string;
   error?: string;
   reused?: boolean;
+}
+
+// ============================================
+// Channel Submission Config (passed from page/form to useChannelSubmission)
+// ============================================
+
+export interface ChannelSubmitConfig {
+  hasEvolutionConfig?: boolean;
+  hasEvolutionGoConfig?: boolean;
+  googleOAuthClientId?: string;
+  azureAppId?: string;
+  [key: string]: unknown;
+}
+
+export interface EvolutionProviderConfig {
+  instance_name: string;
+  proxy_settings?: {
+    enabled: boolean;
+    host?: string;
+    port?: string;
+    protocol?: string;
+    username?: string;
+    password?: string;
+  };
+  instance_settings?: {
+    rejectCall?: boolean;
+    msgCall?: string;
+    groupsIgnore?: boolean;
+    alwaysOnline?: boolean;
+    readMessages?: boolean;
+    syncFullHistory?: boolean;
+    readStatus?: boolean;
+    enable_sync_features?: boolean;
+  };
+  api_url?: string;
+  admin_token?: string;
+}
+
+export interface EvolutionGoProviderConfig {
+  instance_name: string;
+  instance_uuid?: string;
+  instance_token?: string;
+  always_online?: boolean;
+  reject_call?: boolean;
+  read_messages?: boolean;
+  ignore_groups?: boolean;
+  ignore_status?: boolean;
+  api_url?: string;
+  admin_token?: string;
 }
 
 // ============================================

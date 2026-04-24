@@ -276,7 +276,7 @@ function useInbox(inbox: Inbox | null): InboxHook {
 
 export default function ChannelSettings() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { channelId: id } = useParams();
   const { t } = useLanguage('channels');
   const inboxId = id || '';
 

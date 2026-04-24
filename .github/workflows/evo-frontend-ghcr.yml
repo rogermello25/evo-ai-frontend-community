@@ -41,6 +41,8 @@ jobs:
           platforms: linux/amd64
           push: true
           provenance: false
+          build-args: |
+            VITE_EVOLUTION_API_KEY=${{ secrets.VITE_EVOLUTION_API_KEY }}
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ github.sha }}

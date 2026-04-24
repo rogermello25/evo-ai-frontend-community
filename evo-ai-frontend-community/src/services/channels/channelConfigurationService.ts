@@ -645,10 +645,10 @@ export const ZapiService = {
   async setLastSeen(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
@@ -669,10 +669,10 @@ export const ZapiService = {
   async setPhotoVisualization(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
@@ -693,10 +693,10 @@ export const ZapiService = {
   async setDescription(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
@@ -717,10 +717,10 @@ export const ZapiService = {
   async setGroupAddPermission(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
@@ -741,10 +741,10 @@ export const ZapiService = {
   async setOnline(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
@@ -762,10 +762,10 @@ export const ZapiService = {
   async setReadReceipts(
     instanceId: string,
     visualizationType: string,
-    contactsBlacklist?: any[],
-  ): Promise<any> {
+    contactsBlacklist?: string[],
+  ): Promise<unknown> {
     try {
-      const payload: any = { visualizationType };
+      const payload: { visualizationType: string; contactsBlacklist?: string[] } = { visualizationType };
       if (contactsBlacklist) {
         payload.contactsBlacklist = contactsBlacklist;
       }
