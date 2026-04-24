@@ -1,5 +1,6 @@
 import { actionCableService } from './websocket/actionCableService';
 import { useAuthStore } from '@/store/authStore';
+import { logError } from '@/utils/telemetry';
 
 export class ReconnectService {
   private isOnline = true;
@@ -100,9 +101,8 @@ export class ReconnectService {
       window.dispatchEvent(new CustomEvent('evolution:reconnected'));
 
     } catch (error) {
-      console.error('ReconnectService.reconnectServices error:', error);
-      // Schedule another reconnect attempt
-      this.scheduleReconnect(10000); // Try again in 10 seconds
+      logError('ReconnectService', error);
+      this.scheduleReconnect(10000);
     }
   }
 
@@ -138,7 +138,7 @@ export class ReconnectService {
         throw new Error('Health check failed');
       }
     } catch (error) {
-      console.error('ReconnectService.checkAndReconnect error:', error);
+      logError('ReconnectService.checkAndReconnect', error);
       this.scheduleReconnect();
     }
   }

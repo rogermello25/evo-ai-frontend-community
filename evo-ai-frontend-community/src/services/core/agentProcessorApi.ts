@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
 import apiAuth from '@/services/core/apiAuth';
+import { logError } from '@/utils/telemetry';
 
 const agentProcessorApi = axios.create({
   baseURL: `${import.meta.env.VITE_AGENT_PROCESSOR_URL}/api/v1`,
@@ -41,7 +42,7 @@ agentProcessorApi.interceptors.response.use(
       error?.response?.data?.message ||
       error?.message ||
       'Unknown error';
-    console.error('Agent Processor API Error:', detail, { status: error?.response?.status });
+    logError('AgentProcessorAPI', new Error(detail), { status: error?.response?.status });
 
     const originalRequest = (error as AxiosError).config as InternalAxiosRequestConfig & { _retry?: boolean };
 
