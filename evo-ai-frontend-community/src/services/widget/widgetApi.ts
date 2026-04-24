@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { getConfig } from '@/lib/runtimeConfig';
 
-// Create a separate axios instance for widget API calls
-const baseURL = `${import.meta.env.VITE_API_URL}/api/v1`;
+const baseURL = `${getConfig().apiUrl}/api/v1`;
 const isNgrok = baseURL.includes('ngrok');
 
 export const widgetApi = axios.create({

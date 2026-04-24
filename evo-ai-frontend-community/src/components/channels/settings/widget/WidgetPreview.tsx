@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { WidgetConfig } from '../helpers/widgetHelpers';
 import { useLanguage } from '@/hooks/useLanguage';
+import { getConfig } from '@/lib/runtimeConfig';
 
 interface WidgetPreviewProps {
   config: WidgetConfig & {
@@ -16,7 +17,7 @@ export default function WidgetPreview({ config, websiteToken }: WidgetPreviewPro
   const src = useMemo(() => {
     if (!websiteToken || typeof window === 'undefined') return '';
     const base = window.location.origin;
-    const apiBase = import.meta.env.VITE_API_URL || '';
+    const apiBase = getConfig().apiUrl;
     const query = apiBase
       ? `website_token=${encodeURIComponent(websiteToken)}&api_base=${encodeURIComponent(apiBase)}`
       : `website_token=${encodeURIComponent(websiteToken)}`;

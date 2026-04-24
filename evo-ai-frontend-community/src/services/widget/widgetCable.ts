@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createConsumer, Consumer, Subscription } from '@rails/actioncable';
+import { getConfig } from '@/lib/runtimeConfig';
 
 export interface CableOptions {
   cableUrl?: string; // optional custom cable URL, defaults to VITE_API_URL origin + /cable
@@ -17,7 +18,7 @@ export class WidgetCable {
   private handlers: CableHandlers;
 
   constructor(pubsubToken: string, handlers: CableHandlers = {}, opts: CableOptions = {}) {
-    const base = new URL(import.meta.env.VITE_API_URL);
+    const base = new URL(getConfig().apiUrl);
     const cableUrl = opts.cableUrl || `${base.origin}/cable`;
     this.consumer = createConsumer(cableUrl);
     this.handlers = handlers;

@@ -19,6 +19,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -41,13 +42,6 @@ jobs:
           platforms: linux/amd64
           push: true
           provenance: false
-          build-args: |
-            VITE_API_URL=${{ vars.VITE_API_URL }}
-            VITE_AUTH_API_URL=${{ vars.VITE_AUTH_API_URL }}
-            VITE_WS_URL=${{ vars.VITE_WS_URL }}
-            VITE_EVOAI_API_URL=${{ vars.VITE_EVOAI_API_URL }}
-            VITE_AGENT_PROCESSOR_URL=${{ vars.VITE_AGENT_PROCESSOR_URL }}
-            VITE_EVOLUTION_API_URL=${{ vars.VITE_EVOLUTION_API_URL }}
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ github.sha }}

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/authStore';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
+import { getConfig } from '@/lib/runtimeConfig';
 
-// Create a separate axios instance for evo-ai-core-service
 const evoaiApi = axios.create({
-  baseURL: `${import.meta.env.VITE_EVOAI_API_URL}/api/v1`,
+  baseURL: `${getConfig().evoAiApiUrl}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },

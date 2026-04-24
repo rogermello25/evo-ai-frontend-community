@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-
+import { getConfig } from '@/lib/runtimeConfig';
 import { extractData } from '@/utils/apiHelpers';
 import { wdebug } from '@/utils/widget/debug';
 import type { WidgetConfig, PreChatSubmissionData, WidgetMessage } from '@/types/settings';
@@ -136,7 +136,7 @@ class WidgetService {
       if (fromQuery) candidates.push(fromQuery);
     } catch (_) {}
 
-    const fromEnv = this.normalizeBase(import.meta.env.VITE_API_URL);
+    const fromEnv = this.normalizeBase(getConfig().apiUrl);
     if (fromEnv) candidates.push(fromEnv);
 
     const fromOrigin = this.normalizeBase(
@@ -259,7 +259,7 @@ class WidgetService {
     } catch (e) {
       // Fallback: GET /widget (HTML) and parse window.authToken from the response
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/widget?website_token=${encodeURIComponent(websiteToken)}`, {
+        const res = await fetch(`${getConfig().apiUrl}/widget?website_token=${encodeURIComponent(websiteToken)}`, {
           credentials: 'include',
         });
         const html = await res.text();

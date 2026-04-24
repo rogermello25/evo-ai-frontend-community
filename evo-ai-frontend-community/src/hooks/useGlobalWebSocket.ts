@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChatActionCableConnector, type ChatEventHandlers, type ConnectionParams } from '@/services/chat';
+import { getConfig } from '@/lib/runtimeConfig';
 
 interface GlobalWebSocketHandlers {
   onMessageCreated?: (data: unknown) => void;
@@ -39,7 +40,7 @@ export const useGlobalWebSocket = (handlers: GlobalWebSocketHandlers) => {
       };
 
       // Convert HTTP/HTTPS URL to WS/WSS WebSocket URL
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const apiUrl = getConfig().apiUrl;
       const wsProtocol = apiUrl.includes('https') ? 'wss:' : 'ws:';
       const websocketHost = apiUrl.replace(/^https?:/, wsProtocol);
 
