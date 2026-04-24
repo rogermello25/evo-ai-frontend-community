@@ -1,8 +1,9 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
+import { getConfig } from '@/lib/runtimeConfig';
 
 const apiEvolution = axios.create({
-  baseURL: `${import.meta.env.VITE_EVOLUTION_API_URL}/api/v1`,
+  baseURL: `${getConfig().evolutionApiUrl}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },

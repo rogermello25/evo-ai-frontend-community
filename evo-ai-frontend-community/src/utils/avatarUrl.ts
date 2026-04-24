@@ -1,7 +1,6 @@
-const rawAuthApiBaseURL =
-  import.meta.env.VITE_AUTH_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  'http://localhost:3030';
+import { getConfig } from '@/lib/runtimeConfig';
+
+const rawAuthApiBaseURL = getConfig().authApiUrl || getConfig().apiUrl;
 
 const authOrigin = rawAuthApiBaseURL.replace(/\/api\/v\d+$/i, '').replace(/\/$/, '');
 

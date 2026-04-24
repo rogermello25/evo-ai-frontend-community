@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuthStore } from '@/store/authStore';
+import { getConfig } from '@/lib/runtimeConfig';
 
 interface WebSocketMessage {
   event: string;
@@ -24,7 +25,7 @@ export const useNotificationWebSocket = (callbacks: NotificationWebSocketProps) 
 
   const getWebSocketUrl = () => {
     // Get WebSocket URL from backend Rails (not Vite)
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = getConfig().apiUrl;
     const wsProtocol = apiUrl.includes('https') ? 'wss:' : 'ws:';
     const wsUrl = apiUrl.replace(/^https?:/, wsProtocol);
 

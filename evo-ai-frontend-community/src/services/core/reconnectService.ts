@@ -1,5 +1,6 @@
 import { actionCableService } from './websocket/actionCableService';
 import { useAuthStore } from '@/store/authStore';
+import { getConfig } from '@/lib/runtimeConfig';
 
 export class ReconnectService {
   private isOnline = true;
@@ -127,7 +128,7 @@ export class ReconnectService {
 
     // Ping server to check connectivity
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/health/live`, {
+      const response = await fetch(`${getConfig().apiUrl}/health/live`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

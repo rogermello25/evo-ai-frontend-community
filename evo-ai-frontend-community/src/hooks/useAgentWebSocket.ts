@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { getConfig } from '@/lib/runtimeConfig';
 
 interface FileData {
   filename: string;
@@ -35,7 +36,7 @@ export function useAgentWebSocket({
 
   const getApiUrl = () => {
     // WebSocket está no evo-ai-processor, não no evo-ai-core-service
-    return import.meta.env.VITE_AGENT_PROCESSOR_URL || 'http://localhost:8000';
+    return getConfig().agentProcessorUrl;
   };
 
   const openWebSocket = useCallback(() => {

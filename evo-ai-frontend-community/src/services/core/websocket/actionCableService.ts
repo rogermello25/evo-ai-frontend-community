@@ -1,4 +1,5 @@
 import { createConsumer, Consumer, Subscription } from '@rails/actioncable';
+import { getConfig } from '@/lib/runtimeConfig';
 
 class ActionCableService {
   private consumer: Consumer | null = null;
@@ -15,7 +16,7 @@ class ActionCableService {
 
     // Create WebSocket connection
     // Convert HTTP/HTTPS URL to WS/WSS WebSocket URL
-    const apiUrl = import.meta.env.VITE_WS_URL || import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const apiUrl = getConfig().wsUrl || getConfig().apiUrl;
     const wsProtocol = apiUrl.includes('https') ? 'wss:' : 'ws:';
     const wsUrl = apiUrl.replace(/^https?:/, wsProtocol);
     const websocketURL = `${wsUrl}/cable?pubsub_token=${pubsubToken}`;

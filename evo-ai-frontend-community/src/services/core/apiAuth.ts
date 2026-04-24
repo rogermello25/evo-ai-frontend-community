@@ -2,10 +2,9 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
 import { requestMonitor } from '@/utils/requestMonitor';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
+import { getConfig } from '@/lib/runtimeConfig';
 
-// Create a separate axios instance for auth-service
-// Use nginx proxy (port 3030) or direct auth service URL
-const authApiBaseURL = import.meta.env.VITE_AUTH_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:3030';
+const authApiBaseURL = getConfig().authApiUrl || getConfig().apiUrl;
 const authApi = axios.create({
   baseURL: `${authApiBaseURL}/api/v1`,
   headers: {

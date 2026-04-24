@@ -2,9 +2,10 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
 import apiAuth from '@/services/core/apiAuth';
+import { getConfig } from '@/lib/runtimeConfig';
 
 const agentProcessorApi = axios.create({
-  baseURL: `${import.meta.env.VITE_AGENT_PROCESSOR_URL}/api/v1`,
+  baseURL: `${getConfig().agentProcessorUrl}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },

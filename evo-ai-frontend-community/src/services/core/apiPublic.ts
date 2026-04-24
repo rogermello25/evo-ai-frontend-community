@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/authStore';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
+import { getConfig } from '@/lib/runtimeConfig';
 
-// Criar instância do axios com configurações base
 const apiPublic = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/public/api/v1`,
+  baseURL: `${getConfig().apiUrl}/public/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },

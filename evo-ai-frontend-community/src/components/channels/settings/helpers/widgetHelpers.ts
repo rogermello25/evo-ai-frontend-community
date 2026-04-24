@@ -1,5 +1,6 @@
 // Types for Widget Builder
 import i18n from '@/i18n/config';
+import { getConfig } from '@/lib/runtimeConfig';
 export interface WidgetConfig {
   websiteName: string;
   welcomeHeading: string;
@@ -132,7 +133,7 @@ export const generateWidgetScript = (
   // SDK and widget page are served from frontend origin (/widget route).
   const SDK_BASE = typeof window !== 'undefined' ? window.location.origin : '';
   let WIDGET_BASE = SDK_BASE;
-  const ENV_API_BASE = import.meta.env.VITE_API_URL || '';
+  const ENV_API_BASE = getConfig().apiUrl;
 
   // Keep compatibility with legacy scripts that already point widget page to frontend host.
   try {
@@ -160,7 +161,7 @@ export const generateWidgetScript = (
 export const generateWidgetIframeEmbed = (originalScript: string): string => {
   const token = extractWebsiteToken(originalScript) || 'REPLACE_WITH_WEBSITE_TOKEN';
   const widgetBase = typeof window !== 'undefined' ? window.location.origin : '';
-  const envApiBase = import.meta.env.VITE_API_URL || '';
+  const envApiBase = getConfig().apiUrl;
   const src = envApiBase
     ? `${widgetBase}/widget?website_token=${token}&api_base=${encodeURIComponent(envApiBase)}`
     : `${widgetBase}/widget?website_token=${token}`;

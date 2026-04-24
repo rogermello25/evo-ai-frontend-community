@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
+import { getConfig } from '@/lib/runtimeConfig';
 import { useWebSocket } from '@/hooks/chat/useWebSocket';
 import { useAuth } from '@/contexts/AuthContext';
 import { Message, Conversation, MessageSender, MessageTypeValue, Attachment } from '@/types/chat/api';
@@ -226,7 +227,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
     user?.pubsub_token || '', // ✅ Token real do usuário
     {
       enabled: !!(user?.id && user?.pubsub_token), // ✅ Habilitado condicionalmente
-      websocketHost: import.meta.env.VITE_API_URL, // ✅ Host correto da API
+      websocketHost: getConfig().apiUrl,
       handlers: {
         onMessageCreated: useCallback((data: MessageCreatedEvent) => {
           // Canonical conversation id (UUID from backend)

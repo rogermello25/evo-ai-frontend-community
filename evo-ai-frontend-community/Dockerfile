@@ -3,14 +3,6 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Accept build arguments from GitHub Actions
-ARG VITE_API_URL
-ARG VITE_AUTH_API_URL
-ARG VITE_WS_URL
-ARG VITE_EVOAI_API_URL
-ARG VITE_AGENT_PROCESSOR_URL
-ARG VITE_EVOLUTION_API_URL
-
 # Copy package files
 COPY package.json package-lock.json ./
 
@@ -20,15 +12,7 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build with env vars from build args
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_AUTH_API_URL=$VITE_AUTH_API_URL
-ENV VITE_WS_URL=$VITE_WS_URL
-ENV VITE_EVOAI_API_URL=$VITE_EVOAI_API_URL
-ENV VITE_AGENT_PROCESSOR_URL=$VITE_AGENT_PROCESSOR_URL
-ENV VITE_EVOLUTION_API_URL=$VITE_EVOLUTION_API_URL
-
-# Build the application
+# Build the application — URLs injected at runtime via docker-entrypoint.sh
 RUN npm run build
 
 # Production stage

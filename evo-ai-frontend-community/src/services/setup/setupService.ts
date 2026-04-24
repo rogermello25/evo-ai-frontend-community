@@ -1,10 +1,8 @@
 import axios from 'axios';
 import type { OnboardingFormData } from '@/pages/Setup/OnboardingPage';
+import { getConfig } from '@/lib/runtimeConfig';
 
-const authBaseURL =
-  import.meta.env.VITE_AUTH_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  'http://localhost:3001';
+const authBaseURL = getConfig().authApiUrl || getConfig().apiUrl;
 
 const setupApi = axios.create({
   baseURL: authBaseURL,

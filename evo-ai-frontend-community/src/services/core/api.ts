@@ -3,9 +3,10 @@ import { useAuthStore } from '@/store/authStore';
 import { requestMonitor } from '@/utils/requestMonitor';
 import apiAuth from '@/services/core/apiAuth';
 import { applySetupInterceptor } from '@/services/core/setupInterceptor';
+import { getConfig } from '@/lib/runtimeConfig';
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
+  baseURL: `${getConfig().apiUrl}/api/v1`,
   headers: {
     'Content-Type': 'application/json',
   },
