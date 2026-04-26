@@ -1,5 +1,6 @@
 import authApi from '@/services/core/apiAuth';
 import api from '@/services/core/api';
+import type { AxiosResponse } from 'axios';
 import { extractData, extractError } from '@/utils/apiHelpers';
 import { logError } from '@/utils/telemetry';
 import type { Account, UpdateAccount, FormDataOptions, AccountUpdateResponse } from '@/types/settings';
@@ -10,9 +11,10 @@ class AccountService {
     try {
       const response = await authApi.get<{ account: Account }>('/account');
       return extractData<Account>(response);
-    } catch (error: any) {
+    } catch (error) {
       logError('accountService.getAccount', error);
-      throw new Error(error?.response?.data?.message || 'Erro ao buscar conta');
+      const errorInfo = extractError(error);
+      throw new Error(errorInfo.message || 'Erro ao buscar conta');
     }
   }
 
@@ -20,7 +22,7 @@ class AccountService {
     try {
       const response = await authApi.patch<AccountUpdateResponse>('/account', { account: payload });
       return extractData<Account>(response);
-    } catch (error: any) {
+    } catch (error) {
       logError('accountService.updateAccount', error);
       const errorInfo = extractError(error);
       throw new Error(errorInfo.message || 'Erro ao atualizar conta');
@@ -37,12 +39,12 @@ class AccountService {
         api.get('/labels'),
       ]);
 
-      const getResultData = (result: PromiseSettledResult<any>, isAuthService = false) => {
+      const getResultData = (result: PromiseSettledResult<AxiosResponse>, isAuthService = false) => {
         if (result.status === 'fulfilled') {
           const data = extractData(result.value);
           if (isAuthService) {
             // Auth service may return { users: [...] }
-            return (data as any)?.users || data || [];
+            return (data as { users?: unknown[] })?.users || data || [];
           }
           return Array.isArray(data) ? data : [];
         }
@@ -55,7 +57,7 @@ class AccountService {
         teams: getResultData(teamsRes),
         labels: getResultData(labelsRes),
       };
-    } catch (error: any) {
+    } catch (error) {
       logError('accountService.getFormData', error);
       // Retornar dados vazios em caso de erro para não quebrar o formulário
       return {
@@ -89,7 +91,7 @@ class AccountService {
         brandName: 'Evolution',
         installationName: 'Evolution',
       };
-    } catch (error: any) {
+    } catch (error) {
       logError('accountService.getGlobalConfig', error);
       // Fallback para valores padrão em caso de erro
       return {
