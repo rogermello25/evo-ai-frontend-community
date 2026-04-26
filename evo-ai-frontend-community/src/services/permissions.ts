@@ -1,5 +1,6 @@
 import { apiAuth } from '@/services/core';
 import { extractData } from '@/utils/apiHelpers';
+import { logError, logWarn } from '@/utils/telemetry';
 import type {
   ResourceActionsResponse,
   ResourceActionsData,
@@ -53,11 +54,11 @@ class PermissionsService {
 
       return this.cache;
     } catch (error) {
-      console.error('Erro ao buscar configurações de permissões:', error);
+      logError('permissions.getResourceActions', error);
 
       // Se tiver cache antigo, usar como fallback
       if (this.cache) {
-        console.warn('Usando cache antigo de permissões');
+        logWarn('permissions.getResourceActions', 'Using stale permissions cache');
         return this.cache;
       }
 
@@ -98,11 +99,11 @@ class PermissionsService {
         // Limpar Promise em caso de erro
         this.userPermissionsPromise = null;
 
-      console.error('Erro ao buscar permissões do usuário:', error);
+      logError('permissions.getUserPermissions', error);
 
       // Se tiver cache antigo, usar como fallback
       if (this.userPermissionsCache) {
-        console.warn('Usando cache antigo de permissões do usuário');
+        logWarn('permissions.getUserPermissions', 'Using stale user permissions cache');
         return this.userPermissionsCache;
       }
 
@@ -149,11 +150,11 @@ class PermissionsService {
         // Limpar Promise em caso de erro
         this.accountPermissionsPromise = null;
 
-        console.error('Erro ao buscar permissões do account:', error);
+        logError('permissions.getAccountPermissions', error);
 
         // Se tiver cache antigo, usar como fallback
         if (this.accountPermissionsData) {
-          console.warn('Usando cache antigo de permissões do account');
+          logWarn('permissions.getAccountPermissions', 'Using stale account permissions cache');
           return this.accountPermissionsData.permissions;
         }
 

@@ -1,8 +1,8 @@
 import authApi from '@/services/core/apiAuth';
 import api from '@/services/core/api';
-import { extractData } from '@/utils/apiHelpers';
+import { extractData, extractError } from '@/utils/apiHelpers';
+import { logError } from '@/utils/telemetry';
 import type { Account, UpdateAccount, FormDataOptions, AccountUpdateResponse } from '@/types/settings';
-import { extractError } from '@/utils/apiHelpers';
 import { fetchGlobalConfig } from '@/contexts/GlobalConfigContext';
 
 class AccountService {
@@ -11,7 +11,7 @@ class AccountService {
       const response = await authApi.get<{ account: Account }>('/account');
       return extractData<Account>(response);
     } catch (error: any) {
-      console.error('Erro ao buscar conta:', error);
+      logError('accountService.getAccount', error);
       throw new Error(error?.response?.data?.message || 'Erro ao buscar conta');
     }
   }
@@ -21,7 +21,7 @@ class AccountService {
       const response = await authApi.patch<AccountUpdateResponse>('/account', { account: payload });
       return extractData<Account>(response);
     } catch (error: any) {
-      console.error('Erro ao atualizar conta:', error);
+      logError('accountService.updateAccount', error);
       const errorInfo = extractError(error);
       throw new Error(errorInfo.message || 'Erro ao atualizar conta');
     }
@@ -56,7 +56,7 @@ class AccountService {
         labels: getResultData(labelsRes),
       };
     } catch (error: any) {
-      console.error('Erro ao buscar dados do formulário:', error);
+      logError('accountService.getFormData', error);
       // Retornar dados vazios em caso de erro para não quebrar o formulário
       return {
         inboxes: [],
@@ -90,7 +90,7 @@ class AccountService {
         installationName: 'Evolution',
       };
     } catch (error: any) {
-      console.error('Erro ao buscar configuração global:', error);
+      logError('accountService.getGlobalConfig', error);
       // Fallback para valores padrão em caso de erro
       return {
         appVersion: import.meta.env.VITE_APP_VERSION || '3.0.0',
