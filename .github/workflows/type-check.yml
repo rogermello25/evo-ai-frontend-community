@@ -1,0 +1,54 @@
+name: TypeScript No-Any Gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'evo-ai-frontend-community/src/**'
+
+jobs:
+  no-any-gate:
+    name: Block new explicit any
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: evo-ai-frontend-community/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: evo-ai-frontend-community
+        run: pnpm install --frozen-lockfile
+
+      - name: Find changed TS/TSX files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only --diff-filter=d \
+            origin/${{ github.base_ref }}...HEAD \
+            | grep -E '^evo-ai-frontend-community/src/.*\.(ts|tsx)$' \
+            | sed 's|^evo-ai-frontend-community/||' \
+            | tr '\n' ' ')
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+          if [ -n "$FILES" ]; then
+            echo "Checking: $FILES"
+          else
+            echo "No src TS/TSX files changed — skipping lint"
+          fi
+
+      - name: Reject new explicit any
+        if: steps.changed.outputs.files != ''
+        working-directory: evo-ai-frontend-community
+        run: |
+          pnpm exec eslint \
+            --rule '{"@typescript-eslint/no-explicit-any": ["error"]}' \
+            --max-warnings 0 \
+            ${{ steps.changed.outputs.files }}
