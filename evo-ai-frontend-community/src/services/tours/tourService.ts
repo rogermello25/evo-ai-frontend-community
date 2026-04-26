@@ -1,5 +1,3 @@
-import api from '@/services/core/api';
-import { extractData } from '@/utils/apiHelpers';
 import type { UserTour } from '@/types/auth';
 
 const LS_KEY = 'evoai:user_tours';
@@ -21,34 +19,18 @@ function saveToStorage(tours: UserTour[]): void {
 
 class TourService {
   async getTours(): Promise<UserTour[]> {
-    try {
-      const response = await api.get('/user_tours');
-      return extractData<UserTour[]>(response);
-    } catch {
-      return loadFromStorage();
-    }
+    return loadFromStorage();
   }
 
   async completeTour(tourKey: string, status: 'completed' | 'skipped' = 'completed'): Promise<UserTour> {
-    const fallback: UserTour = { id: tourKey, tour_key: tourKey, completed_at: new Date().toISOString(), status };
-    try {
-      const response = await api.post('/user_tours', {
-        tour: { tour_key: tourKey, status },
-      });
-      return extractData<UserTour>(response);
-    } catch {
-      const tours = loadFromStorage().filter(t => t.tour_key !== tourKey);
-      saveToStorage([...tours, fallback]);
-      return fallback;
-    }
+    const tour: UserTour = { id: tourKey, tour_key: tourKey, completed_at: new Date().toISOString(), status };
+    const tours = loadFromStorage().filter(t => t.tour_key !== tourKey);
+    saveToStorage([...tours, tour]);
+    return tour;
   }
 
   async resetTour(tourKey: string): Promise<void> {
-    try {
-      await api.delete(`/user_tours/${tourKey}`);
-    } catch {
-      saveToStorage(loadFromStorage().filter(t => t.tour_key !== tourKey));
-    }
+    saveToStorage(loadFromStorage().filter(t => t.tour_key !== tourKey));
   }
 }
 
