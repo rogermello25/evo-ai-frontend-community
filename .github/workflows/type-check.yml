@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: evo-ai-frontend-community
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Find changed TS/TSX files
         id: changed
