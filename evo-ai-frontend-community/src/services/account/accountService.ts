@@ -39,12 +39,12 @@ class AccountService {
         api.get('/labels'),
       ]);
 
-      const getResultData = (result: PromiseSettledResult<AxiosResponse>, isAuthService = false) => {
+      const getResultData = (result: PromiseSettledResult<AxiosResponse>, isAuthService = false): unknown[] => {
         if (result.status === 'fulfilled') {
           const data = extractData(result.value);
           if (isAuthService) {
             // Auth service may return { users: [...] }
-            return (data as { users?: unknown[] })?.users || data || [];
+            return (data as { users?: unknown[] })?.users ?? (Array.isArray(data) ? data : []);
           }
           return Array.isArray(data) ? data : [];
         }
