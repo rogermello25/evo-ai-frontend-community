@@ -49,7 +49,10 @@ const GoogleCalendarService = {
           state,
         }
       );
-      return unwrap<GoogleCalendarConnectionResponse>(data);
+      const inner = unwrap<Omit<GoogleCalendarConnectionResponse, 'success'>>(data);
+      // Processor's success_response envelope has success:true at the outer level;
+      // the inner `data` does not carry it. Propagate it so CallbackPage's contract is honored.
+      return { success: true, ...inner } as GoogleCalendarConnectionResponse;
     } catch (error) {
       console.error('GoogleCalendarService.completeAuthorization error:', error);
       throw error;
