@@ -21,6 +21,7 @@ import {
   Phone,
   Mail,
   MessageSquare,
+  MessageSquarePlus,
   User,
   CalendarClock,
   ListTodo,
@@ -37,6 +38,8 @@ import {
   UpdatePipelineData,
   CreateStageData,
 } from '@/types/analytics';
+import { Contact } from '@/types/contacts';
+import StartConversationModal from '@/components/contacts/StartConversationModal';
 import PipelineSwitcher from '@/components/pipelines/PipelineSwitcher';
 import EditPipelineModal from '@/components/pipelines/EditPipelineModal';
 import CreateStageModal from '@/components/pipelines/CreateStageModal';
@@ -91,6 +94,10 @@ export default function PipelineKanban() {
   const scheduleActionContactId =
     selectedConversationForSchedule?.conversation?.contact?.id ??
     selectedConversationForSchedule?.contact?.id;
+
+  // Start conversation modal state (for lead cards without a conversation)
+  const [startConversationOpen, setStartConversationOpen] = useState(false);
+  const [startConversationContact, setStartConversationContact] = useState<Contact | null>(null);
 
   // Load pipeline data
   const loadPipelineData = useCallback(async () => {
@@ -642,6 +649,42 @@ export default function PipelineKanban() {
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div className="flex items-center space-x-1">
+                              {/* Iniciar conversa — only for lead cards without a conversation */}
+                              {item.is_lead && !item.conversation && item.contact && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  title={t('kanban.item.startConversation')}
+                                  className="h-auto p-1 hover:bg-muted"
+                                  onClick={() => {
+                                    const contact: Contact = {
+                                      id: item.contact!.id,
+                                      name: item.contact!.name,
+                                      email: item.contact!.email ?? '',
+                                      phone_number: item.contact!.phone_number ?? '',
+                                      avatar_url: item.contact!.avatar_url ?? '',
+                                      type: 'person',
+                                      thumbnail: '',
+                                      avatar: '',
+                                      identifier: undefined,
+                                      tax_id: '',
+                                      website: '',
+                                      industry: '',
+                                      created_at: '',
+                                      updated_at: '',
+                                      availability_status: 'offline',
+                                      blocked: false,
+                                      custom_attributes: {},
+                                      additional_attributes: {},
+                                      contact_inboxes: [],
+                                    };
+                                    setStartConversationContact(contact);
+                                    setStartConversationOpen(true);
+                                  }}
+                                >
+                                  <MessageSquarePlus className="w-4 h-4 text-primary" />
+                                </Button>
+                              )}
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <Button
@@ -1091,6 +1134,18 @@ export default function PipelineKanban() {
             setSelectedConversationForSchedule(null);
           }}
           contactId={scheduleActionContactId}
+        />
+      )}
+
+      {/* Start Conversation Modal — for lead cards without a conversation */}
+      {startConversationContact && (
+        <StartConversationModal
+          open={startConversationOpen}
+          onOpenChange={(open) => {
+            setStartConversationOpen(open);
+            if (!open) setStartConversationContact(null);
+          }}
+          contact={startConversationContact}
         />
       )}
     </div>
