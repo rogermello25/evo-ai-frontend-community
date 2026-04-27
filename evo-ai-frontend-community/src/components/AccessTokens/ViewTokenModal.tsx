@@ -6,17 +6,21 @@ import { DialogHeader } from '@evoapi/design-system/dialog';
 import { DialogTitle } from '@evoapi/design-system/dialog';
 import { Button } from '@evoapi/design-system/button';
 import { Input } from '@evoapi/design-system/input';;
-import { Copy, Eye, EyeOff, Key } from 'lucide-react';
+import { AlertCircle, Copy, Eye, EyeOff, Key } from 'lucide-react';
 import { Badge } from '@evoapi/design-system/badge';;
 import type { AccessToken } from '@/types/auth';
 import { useTranslation } from '@/hooks/useTranslation';
 import { parseScopesFromAPI } from '@/services/auth/accessTokensService';
+import { getConfig } from '@/lib/runtimeConfig';
 
 interface ViewTokenModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   token: AccessToken | null;
   onCopy: (text: string, label: string) => void;
+  /** When true, the modal is shown immediately after regenerating — emphasises that
+   * this is a freshly-issued value the user must copy now. */
+  isFreshlyIssued?: boolean;
 }
 
 export default function ViewTokenModal({
@@ -24,9 +28,11 @@ export default function ViewTokenModal({
   onOpenChange,
   token,
   onCopy,
+  isFreshlyIssued = false,
 }: ViewTokenModalProps) {
-  const [showToken, setShowToken] = useState(false);
+  const [showToken, setShowToken] = useState(isFreshlyIssued);
   const { t } = useTranslation('accessTokens');
+  const apiBaseUrl = getConfig().authApiUrl || getConfig().apiUrl || '';
 
   if (!token) return null;
 
@@ -52,6 +58,22 @@ export default function ViewTokenModal({
 
         <div className="max-h-[60vh] overflow-y-auto">
           <div className="space-y-6">
+          {isFreshlyIssued && (
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg dark:bg-amber-900/20 dark:border-amber-800">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-medium text-amber-800 dark:text-amber-200">
+                    {t('viewModal.freshIssue.title')}
+                  </h4>
+                  <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
+                    {t('viewModal.freshIssue.description')}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Token Info */}
           <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
             <div>
@@ -178,47 +200,49 @@ export default function ViewTokenModal({
           </div>
 
           {/* API Usage Example */}
-          <div className="space-y-4 p-4 bg-muted rounded-lg">
-            <h4 className="font-medium">API Usage Example</h4>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium">cURL Example</label>
-              <div className="flex gap-2">
-                <Input
-                  value={`curl -H "api_access_token: ${token.token}" https://api.example.com/v1/endpoint`}
-                  readOnly
-                  className="font-mono text-sm"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleCopy(`curl -H "api_access_token: ${token.token}" https://api.example.com/v1/endpoint`, 'cURL Example')}
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+          {token.token && apiBaseUrl && (
+            <div className="space-y-4 p-4 bg-muted rounded-lg">
+              <h4 className="font-medium">{t('viewModal.usage.title')}</h4>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">JavaScript Example</label>
-              <div className="flex gap-2">
-                <Input
-                  value={`fetch('https://api.example.com/v1/endpoint', { headers: { 'Authorization': 'Bearer ${token.token}' } })`}
-                  readOnly
-                  className="font-mono text-sm"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleCopy(`fetch('https://api.example.com/v1/endpoint', { headers: { 'Authorization': 'Bearer ${token.token}' } })`, 'JavaScript Example')}
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">cURL</label>
+                <div className="flex gap-2">
+                  <Input
+                    value={`curl -H "api_access_token: ${token.token}" ${apiBaseUrl}/api/v1/profile`}
+                    readOnly
+                    className="font-mono text-sm"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopy(`curl -H "api_access_token: ${token.token}" ${apiBaseUrl}/api/v1/profile`, 'cURL')}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">JavaScript</label>
+                <div className="flex gap-2">
+                  <Input
+                    value={`fetch('${apiBaseUrl}/api/v1/profile', { headers: { 'api_access_token': '${token.token}' } })`}
+                    readOnly
+                    className="font-mono text-sm"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopy(`fetch('${apiBaseUrl}/api/v1/profile', { headers: { 'api_access_token': '${token.token}' } })`, 'JavaScript')}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Security Warning */}
           <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg dark:bg-yellow-900/20 dark:border-yellow-800">
