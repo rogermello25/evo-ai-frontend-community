@@ -128,7 +128,14 @@
       ]
     },
     "close": "Fermer",
-    "tokenCopied": "Jeton copié !"
+    "tokenCopied": "Jeton copié !",
+    "freshIssue": {
+      "title": "Nouvelle valeur de jeton",
+      "description": "Copiez cette valeur maintenant — pour des raisons de sécurité, elle ne pourra plus être affichée après la fermeture de cette boîte de dialogue."
+    },
+    "usage": {
+      "title": "Exemples d'utilisation"
+    }
   },
   "empty": {
     "title": "Aucun jeton trouvé",
@@ -139,5 +146,11 @@
     "noPermissionsAvailable": "Aucune permission disponible",
     "retryLoad": "Réessayer",
     "loadError": "Échec du chargement des permissions. Veuillez réessayer."
+  },
+  "regenerate": {
+    "confirmTitle": "Régénérer le jeton ?",
+    "confirmDescription": "Une nouvelle valeur de jeton sera émise pour « {{name}} ». La valeur actuelle cessera immédiatement de fonctionner et tout client qui l'utilise devra être mis à jour.",
+    "confirmAction": "Régénérer",
+    "regenerating": "Régénération..."
   }
 }

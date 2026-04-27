@@ -128,7 +128,14 @@
       ]
     },
     "close": "Close",
-    "tokenCopied": "Token copied!"
+    "tokenCopied": "Token copied!",
+    "freshIssue": {
+      "title": "New token value",
+      "description": "Copy this value now — for security reasons it cannot be shown again after you close this dialog."
+    },
+    "usage": {
+      "title": "Usage examples"
+    }
   },
   "empty": {
     "title": "No tokens found",
@@ -139,5 +146,11 @@
     "noPermissionsAvailable": "No permissions available",
     "retryLoad": "Retry",
     "loadError": "Failed to load permissions. Please try again."
+  },
+  "regenerate": {
+    "confirmTitle": "Regenerate token?",
+    "confirmDescription": "A new token value will be issued for \"{{name}}\". The current value will stop working immediately and any client using it will need to be updated.",
+    "confirmAction": "Regenerate",
+    "regenerating": "Regenerating..."
   }
 }

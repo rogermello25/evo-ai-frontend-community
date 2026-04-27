@@ -128,7 +128,14 @@
       ]
     },
     "close": "Cerrar",
-    "tokenCopied": "¡Token copiado!"
+    "tokenCopied": "¡Token copiado!",
+    "freshIssue": {
+      "title": "Nuevo valor de token",
+      "description": "Copia este valor ahora — por motivos de seguridad no se podrá mostrar de nuevo después de cerrar este diálogo."
+    },
+    "usage": {
+      "title": "Ejemplos de uso"
+    }
   },
   "empty": {
     "title": "No se encontraron tokens",
@@ -139,5 +146,11 @@
     "noPermissionsAvailable": "No hay permisos disponibles",
     "retryLoad": "Reintentar",
     "loadError": "Error al cargar permisos. Por favor, inténtalo de nuevo."
+  },
+  "regenerate": {
+    "confirmTitle": "¿Regenerar token?",
+    "confirmDescription": "Se emitirá un nuevo valor de token para \"{{name}}\". El valor actual dejará de funcionar de inmediato y cualquier cliente que lo use deberá actualizarse.",
+    "confirmAction": "Regenerar",
+    "regenerating": "Regenerando..."
   }
 }

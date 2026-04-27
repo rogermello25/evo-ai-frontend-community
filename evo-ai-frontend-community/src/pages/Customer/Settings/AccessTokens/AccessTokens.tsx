@@ -67,6 +67,9 @@ export default function AccessTokens() {
   const [editingToken, setEditingToken] = useState<AccessToken | null>(null);
   const [viewTokenModalOpen, setViewTokenModalOpen] = useState(false);
   const [selectedTokenForView, setSelectedTokenForView] = useState<AccessToken | null>(null);
+  const [viewTokenIsFresh, setViewTokenIsFresh] = useState(false);
+  const [regenerateDialogOpen, setRegenerateDialogOpen] = useState(false);
+  const [tokenToRegenerate, setTokenToRegenerate] = useState<AccessToken | null>(null);
   const hasLoaded = useRef(false);
 
   // Load tokens
@@ -219,31 +222,44 @@ export default function AccessTokens() {
     }
 
     setSelectedTokenForView(token);
+    setViewTokenIsFresh(false);
     setViewTokenModalOpen(true);
   };
 
-  const handleRegenerateToken = async (token: AccessToken) => {
+  // Step 1: open the confirmation dialog (regenerating invalidates the previous token)
+  const handleRegenerateToken = (token: AccessToken) => {
     if (!can('access_tokens', 'update_token')) {
       toast.error(t('messages.permissionDenied', { action: 'regenerar' }));
       return;
     }
+    setTokenToRegenerate(token);
+    setRegenerateDialogOpen(true);
+  };
+
+  // Step 2: actually call the API after the user confirms
+  const confirmRegenerateToken = async () => {
+    if (!tokenToRegenerate) return;
+    const target = tokenToRegenerate;
 
     try {
       setState(prev => ({ ...prev, loading: { ...prev.loading, regenerateToken: true } }));
-      const refreshed = await regenerateAccessToken(token.id);
+      const refreshed = await regenerateAccessToken(target.id);
 
       setState(prev => ({
         ...prev,
         tokens: prev.tokens.map(t =>
-          t.id === token.id ? { ...t, ...refreshed } : t,
+          t.id === target.id ? { ...t, ...refreshed } : t,
         ),
       }));
 
+      setRegenerateDialogOpen(false);
+      setTokenToRegenerate(null);
       setSelectedTokenForView(refreshed);
+      setViewTokenIsFresh(true);
       setViewTokenModalOpen(true);
       toast.success(t('messages.regenerateSuccess'));
     } catch (error) {
-      logError('AccessTokens.handleRegenerateToken', error);
+      logError('AccessTokens.confirmRegenerateToken', error);
       toast.error(t('messages.regenerateError'));
     } finally {
       setState(prev => ({ ...prev, loading: { ...prev.loading, regenerateToken: false } }));
@@ -529,10 +545,52 @@ export default function AccessTokens() {
       {/* View Token Modal */}
       <ViewTokenModal
         open={viewTokenModalOpen}
-        onOpenChange={setViewTokenModalOpen}
+        onOpenChange={(open) => {
+          setViewTokenModalOpen(open);
+          if (!open) setViewTokenIsFresh(false);
+        }}
         token={selectedTokenForView}
         onCopy={handleCopy}
+        isFreshlyIssued={viewTokenIsFresh}
       />
+
+      {/* Regenerate Confirmation Dialog */}
+      <Dialog
+        open={regenerateDialogOpen}
+        onOpenChange={(open) => {
+          setRegenerateDialogOpen(open);
+          if (!open) setTokenToRegenerate(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('regenerate.confirmTitle')}</DialogTitle>
+            <DialogDescription>
+              {t('regenerate.confirmDescription', { name: tokenToRegenerate?.name ?? '' })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setRegenerateDialogOpen(false)}
+              disabled={state.loading.regenerateToken}
+            >
+              {t('actions.cancel')}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={confirmRegenerateToken}
+              disabled={state.loading.regenerateToken}
+            >
+              {state.loading.regenerateToken
+                ? t('regenerate.regenerating')
+                : t('regenerate.confirmAction')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
