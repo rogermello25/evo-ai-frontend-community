@@ -629,7 +629,7 @@ export default function PipelineKanban() {
                           onClick={() => {
                             if (!isDraggingRef.current && Date.now() > suppressClickUntilRef.current) {
                               if (item.conversation?.id) {
-                                navigate(`/conversations/${item.conversation.uuid ?? item.conversation.id}`);
+                                navigate(`/conversations/${item.conversation.id}`);
                               } else {
                                 handleEditItem(item);
                               }
