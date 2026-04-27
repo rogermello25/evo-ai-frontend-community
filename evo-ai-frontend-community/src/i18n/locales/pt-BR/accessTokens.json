@@ -18,7 +18,8 @@
       "selectedCount": "{{count}} permissão selecionada",
       "selectedCount_plural": "{{count}} permissões selecionadas",
       "selectAll": "Selecionar Todas",
-      "clearAll": "Limpar Todas"
+      "clearAll": "Limpar Todas",
+      "expiresAt": "Validade"
     },
     "placeholders": {
       "name": "ex. Meu Token da API",
@@ -26,7 +27,8 @@
     },
     "descriptions": {
       "name": "Nome descritivo para identificar este token de acesso",
-      "scopes": "Selecione as permissões que este token terá acesso"
+      "scopes": "Selecione as permissões que este token terá acesso",
+      "expiresAt": "Opcional. Deixe em branco para um token sem prazo de validade."
     }
   },
   "table": {
@@ -95,7 +97,9 @@
       "createdAt": "Criado em",
       "updatedAt": "Atualizado em",
       "ownerId": "ID do Proprietário",
-      "tokenId": "ID do Token"
+      "tokenId": "ID do Token",
+      "expiresAt": "Validade",
+      "expiresNever": "Sem validade"
     },
     "copyToken": "Token de Acesso",
     "descriptions": {

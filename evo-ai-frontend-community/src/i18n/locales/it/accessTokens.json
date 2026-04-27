@@ -13,7 +13,8 @@
       "selectedCount": "{{count}} permesso selezionato",
       "selectedCount_plural": "{{count}} permessi selezionati",
       "selectAll": "Seleziona Tutto",
-      "clearAll": "Cancella Tutto"
+      "clearAll": "Cancella Tutto",
+      "expiresAt": "Scade il"
     },
     "placeholders": {
       "name": "es. Il Mio Token API",
@@ -21,7 +22,8 @@
     },
     "descriptions": {
       "name": "Nome descrittivo per identificare questo token di accesso",
-      "scopes": "Seleziona i permessi a cui questo token avrà accesso"
+      "scopes": "Seleziona i permessi a cui questo token avrà accesso",
+      "expiresAt": "Opzionale. Lasciare vuoto per un token che non scade mai."
     }
   },
   "table": {
@@ -82,7 +84,9 @@
       "token": "Token",
       "scopes": "Ambiti",
       "owner": "Proprietario",
-      "createdAt": "Creato il"
+      "createdAt": "Creato il",
+      "expiresAt": "Scade il",
+      "expiresNever": "Mai scade"
     },
     "copyToken": "Copia Token",
     "close": "Chiudi",

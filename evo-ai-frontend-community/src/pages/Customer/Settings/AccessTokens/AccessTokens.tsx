@@ -20,6 +20,7 @@ import {
   regenerateAccessToken,
 } from '@/services/auth/accessTokensService';
 import { useUserPermissions } from '@/hooks/useUserPermissions';
+import { logError } from '@/utils/telemetry';
 import type { AccessToken, AccessTokensState, AccessTokenFormData } from '@/types/auth';
 
 import {
@@ -98,7 +99,7 @@ export default function AccessTokens() {
           loading: { ...prev.loading, list: false },
         }));
       } catch (error) {
-        console.error('Error loading access tokens:', (error as any).response?.data);
+        logError('AccessTokens.loadTokens', error);
         toast.error(t('messages.loadError'));
         setState(prev => ({ ...prev, loading: { ...prev.loading, list: false } }));
       }
@@ -229,21 +230,20 @@ export default function AccessTokens() {
 
     try {
       setState(prev => ({ ...prev, loading: { ...prev.loading, regenerateToken: true } }));
-      const response = await regenerateAccessToken(token.id);
+      const refreshed = await regenerateAccessToken(token.id);
 
-      // Update the token in the list
       setState(prev => ({
         ...prev,
         tokens: prev.tokens.map(t =>
-          t.id === token.id ? { ...t, token: response.data.token } : t,
+          t.id === token.id ? { ...t, ...refreshed } : t,
         ),
       }));
 
-      setSelectedTokenForView(response.data);
+      setSelectedTokenForView(refreshed);
       setViewTokenModalOpen(true);
       toast.success(t('messages.regenerateSuccess'));
     } catch (error) {
-      console.error('Error regenerating token:', error);
+      logError('AccessTokens.handleRegenerateToken', error);
       toast.error(t('messages.regenerateError'));
     } finally {
       setState(prev => ({ ...prev, loading: { ...prev.loading, regenerateToken: false } }));

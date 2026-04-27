@@ -98,6 +98,23 @@ export default function AccessTokensTable({
         </div>
       ),
     },
+    {
+      key: 'expires_at',
+      label: 'Expires',
+      render: (token: AccessToken) => {
+        if (!token.expires_at) {
+          return <span className="text-xs text-muted-foreground">Never</span>;
+        }
+        const expDate = new Date(token.expires_at);
+        const isExpired = expDate.getTime() < Date.now();
+        return (
+          <div className={`text-sm ${isExpired ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+            {expDate.toLocaleDateString()}
+            {isExpired && <span className="ml-1 text-xs">(expired)</span>}
+          </div>
+        );
+      },
+    },
   ];
 
   const actions = [

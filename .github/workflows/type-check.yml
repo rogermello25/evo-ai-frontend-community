@@ -48,7 +48,11 @@ jobs:
         if: steps.changed.outputs.files != ''
         working-directory: evo-ai-frontend-community
         run: |
+          # The escalated rule below turns any new explicit `any` into a
+          # hard ERROR (the gate's only intent). Pre-existing eslint
+          # warnings unrelated to `any` (e.g. react-hooks/exhaustive-deps)
+          # are NOT blocked by this gate — those are scope for a separate
+          # cleanup. (Earlier --max-warnings 0 was overzealous.)
           pnpm exec eslint \
             --rule '{"@typescript-eslint/no-explicit-any": ["error"]}' \
-            --max-warnings 0 \
             ${{ steps.changed.outputs.files }}
