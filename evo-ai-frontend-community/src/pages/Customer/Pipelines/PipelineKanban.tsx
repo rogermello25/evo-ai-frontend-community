@@ -628,7 +628,11 @@ export default function PipelineKanban() {
                           onDragEnd={handleDragEnd}
                           onClick={() => {
                             if (!isDraggingRef.current && Date.now() > suppressClickUntilRef.current) {
-                              handleEditItem(item);
+                              if (item.conversation?.id) {
+                                navigate(`/conversations/${item.conversation.uuid ?? item.conversation.id}`);
+                              } else {
+                                handleEditItem(item);
+                              }
                             }
                           }}
                         >
