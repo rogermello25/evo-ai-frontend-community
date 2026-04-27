@@ -151,8 +151,8 @@ const IntegrationsSection = ({
                       {/* Título */}
                       <CardTitle className="text-xl font-semibold">{integration.name}</CardTitle>
 
-                      {/* Coming Soon Badge - shown when not connected */}
-                      {!connected && (
+                      {/* Coming Soon Badge - shown only for integrations with no implementation yet */}
+                      {!connected && !hasCredentials && (
                         <span className="px-1 py-0.5 text-[12px] font-medium bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">
                           {t('edit.integrations.comingSoon') || 'Em breve'}
                         </span>
@@ -198,8 +198,16 @@ const IntegrationsSection = ({
                       ) : hasCredentials ? (
                         <Button
                           variant="outline"
-                          className="w-full gap-2 opacity-50 cursor-not-allowed"
-                          disabled
+                          className="w-full gap-2"
+                          onClick={() => {
+                            if (integration.id === 'elevenlabs') {
+                              setShowElevenLabsConfig(true);
+                            } else if (integration.id === 'google-calendar') {
+                              setShowGoogleCalendarConfig(true);
+                            } else if (integration.id === 'google-sheets') {
+                              setShowGoogleSheetsConfig(true);
+                            }
+                          }}
                         >
                           <ExternalLink className="h-4 w-4" />
                           {t('edit.integrations.activate') || 'ATIVAR'}
