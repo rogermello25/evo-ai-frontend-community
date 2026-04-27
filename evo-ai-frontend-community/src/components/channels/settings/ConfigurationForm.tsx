@@ -18,6 +18,10 @@ import { DialogContent } from '@evoapi/design-system/dialog';
 import { DialogDescription } from '@evoapi/design-system/dialog';
 import { DialogHeader } from '@evoapi/design-system/dialog';
 import { DialogTitle } from '@evoapi/design-system/dialog';;
+import { Tooltip } from '@evoapi/design-system/tooltip';
+import { TooltipContent } from '@evoapi/design-system/tooltip';
+import { TooltipTrigger } from '@evoapi/design-system/tooltip';
+import { TooltipProvider } from '@evoapi/design-system';;
 import {
   Key,
   Settings,
@@ -980,24 +984,37 @@ const EvolutionWhatsAppConfig: React.FC<{
                     <label className="block text-sm font-medium mb-2">
                       {t('settings.configuration.whatsapp.instance.profile.name')}
                     </label>
-                    <div className="flex gap-2">
-                      <Input
-                        value={profileSettings.profileName}
-                        onChange={e =>
-                          setProfileSettings(prev => ({ ...prev, profileName: e.target.value }))
-                        }
-                        placeholder={t(
-                          'settings.configuration.whatsapp.instance.profile.namePlaceholder',
-                        )}
-                        className="flex-1"
-                      />
-                      <Button
-                        onClick={handleUpdateProfileName}
-                        disabled={isLoading || !profileSettings.profileName.trim()}
-                      >
-                        {t('settings.configuration.whatsapp.instance.profile.update')}
-                      </Button>
-                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex gap-2">
+                            <Input
+                              value={profileSettings.profileName}
+                              onChange={e =>
+                                setProfileSettings(prev => ({
+                                  ...prev,
+                                  profileName: e.target.value,
+                                }))
+                              }
+                              placeholder={t(
+                                'settings.configuration.whatsapp.instance.profile.namePlaceholder',
+                              )}
+                              className="flex-1"
+                              disabled
+                            />
+                            <Button
+                              onClick={handleUpdateProfileName}
+                              disabled
+                            >
+                              {t('settings.configuration.whatsapp.instance.profile.update')}
+                            </Button>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          <p className="text-xs">Não suportado pela API atual do WhatsApp.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
 
                   {/* Profile Status/Description */}
@@ -2004,22 +2021,32 @@ const ZapiWhatsAppConfig: React.FC<{
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Nome do Perfil</label>
-                <div className="flex gap-2">
-                  <Input
-                    value={profileSettings.profileName}
-                    onChange={e =>
-                      setProfileSettings(prev => ({ ...prev, profileName: e.target.value }))
-                    }
-                    placeholder="Nome do perfil"
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={handleUpdateProfileName}
-                    disabled={isLoading || !profileSettings.profileName}
-                  >
-                    Atualizar
-                  </Button>
-                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex gap-2">
+                        <Input
+                          value={profileSettings.profileName}
+                          onChange={e =>
+                            setProfileSettings(prev => ({ ...prev, profileName: e.target.value }))
+                          }
+                          placeholder="Nome do perfil"
+                          className="flex-1"
+                          disabled
+                        />
+                        <Button
+                          onClick={handleUpdateProfileName}
+                          disabled
+                        >
+                          Atualizar
+                        </Button>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p className="text-xs">Não suportado pela API atual do WhatsApp.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Descrição do Perfil</label>
