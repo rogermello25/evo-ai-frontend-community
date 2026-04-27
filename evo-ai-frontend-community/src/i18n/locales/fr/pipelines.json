@@ -528,6 +528,7 @@
     "item": {
       "unknownUser": "Utilisateur Inconnu",
       "editItem": "Éditer l'Élément",
+      "startConversation": "Démarrer une conversation",
       "scheduleAction": "Planifier l'Action",
       "scheduleActionComingSoon": "Bientôt",
       "scheduleActionTooltip": "Cette fonctionnalité est en développement et sera disponible prochainement.",

@@ -526,6 +526,7 @@
     "item": {
       "unknownUser": "Usuario Desconocido",
       "editItem": "Editar Ítem",
+      "startConversation": "Iniciar conversación",
       "scheduleAction": "Programar Acción",
       "scheduleActionComingSoon": "Próximamente",
       "scheduleActionTooltip": "Esta funcionalidad está en desarrollo y estará disponible próximamente.",
