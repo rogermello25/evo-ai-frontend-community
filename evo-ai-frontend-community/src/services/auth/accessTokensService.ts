@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios';
 import apiAuth from '@/services/core/apiAuth';
 import { extractData, extractResponse } from '@/utils/apiHelpers';
 import type {
@@ -5,6 +6,21 @@ import type {
   AccessTokenFormData,
   AccessTokensResponse,
 } from '@/types/auth';
+
+/**
+ * Single-token endpoints (show/create/update/update_token) wrap the payload
+ * in `{ data: { access_token: {...} } }` on the backend. After extractData
+ * peels the outer `data`, we still need to peel `access_token`. This helper
+ * tolerates both shapes (with or without the wrapping key) so the frontend
+ * doesn't break if an endpoint is ever refactored to return the token flat.
+ */
+const unwrapToken = (response: AxiosResponse): AccessToken => {
+  const inner = extractData<{ access_token?: AccessToken } | AccessToken>(response);
+  if (inner && typeof inner === 'object' && 'access_token' in inner && (inner as { access_token?: AccessToken }).access_token) {
+    return (inner as { access_token: AccessToken }).access_token;
+  }
+  return inner as AccessToken;
+};
 
 /**
  * Get all Access Tokens for an account
@@ -24,7 +40,7 @@ export const getAccessTokens = async (params?: {
  */
 export const getAccessToken = async (id: string): Promise<AccessToken> => {
   const response = await apiAuth.get(`/access_tokens/${id}`);
-  return extractData<AccessToken>(response);
+  return unwrapToken(response);
 };
 
 /**
@@ -37,7 +53,7 @@ export const createAccessToken = async (
   const response = await apiAuth.post('/access_tokens', {
     access_token: data,
   });
-  return extractData<AccessToken>(response);
+  return unwrapToken(response);
 };
 
 /**
@@ -51,7 +67,7 @@ export const updateAccessToken = async (
   const response = await apiAuth.patch(`/access_tokens/${id}`, {
     access_token: data,
   });
-  return extractData<AccessToken>(response);
+  return unwrapToken(response);
 };
 
 /**
@@ -68,7 +84,7 @@ export const deleteAccessToken = async (id: string): Promise<void> => {
  */
 export const regenerateAccessToken = async (id: string): Promise<AccessToken> => {
   const response = await apiAuth.patch(`/access_tokens/${id}/update_token`);
-  return extractData<AccessToken>(response);
+  return unwrapToken(response);
 };
 
 /**
