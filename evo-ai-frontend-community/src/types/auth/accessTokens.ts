@@ -1,4 +1,4 @@
-import type { StandardResponse, PaginatedResponse, PaginationMeta } from '@/types/core';
+import type { PaginatedResponse, PaginationMeta } from '@/types/core';
 
 export interface AccessToken {
   id: string;
@@ -19,9 +19,7 @@ export interface AccessTokenFormData {
   expires_at?: string | null;
 }
 
-export interface AccessTokensResponse extends PaginatedResponse<AccessToken> {}
-
-export interface AccessTokenResponse extends StandardResponse<AccessToken> {}
+export type AccessTokensResponse = PaginatedResponse<AccessToken>;
 
 export interface AccessTokensState {
   tokens: AccessToken[];

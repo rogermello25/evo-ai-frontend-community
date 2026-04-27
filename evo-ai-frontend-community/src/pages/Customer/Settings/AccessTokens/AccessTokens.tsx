@@ -99,7 +99,7 @@ export default function AccessTokens() {
           loading: { ...prev.loading, list: false },
         }));
       } catch (error) {
-        console.error('Error loading access tokens:', (error as any).response?.data);
+        logError('AccessTokens.loadTokens', error);
         toast.error(t('messages.loadError'));
         setState(prev => ({ ...prev, loading: { ...prev.loading, list: false } }));
       }
