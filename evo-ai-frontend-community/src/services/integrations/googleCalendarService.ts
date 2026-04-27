@@ -6,6 +6,16 @@ import type {
   GoogleCalendarConnectionResponse
 } from '@/types/integrations';
 
+// Processor wraps responses in { success, data: {...}, meta, message }.
+// Unwrap to the inner payload here so callers see the documented shape.
+function unwrap<T>(body: unknown): T {
+  if (body && typeof body === 'object' && 'data' in (body as Record<string, unknown>)) {
+    const inner = (body as { data: unknown }).data;
+    if (inner !== undefined && inner !== null) return inner as T;
+  }
+  return body as T;
+}
+
 const GoogleCalendarService = {
   /**
    * Generate Google Calendar OAuth authorization URL
@@ -16,7 +26,7 @@ const GoogleCalendarService = {
         `/agents/${agentId}/integrations/google-calendar/authorization`,
         { email }
       );
-      return data;
+      return unwrap<GoogleCalendarOAuthResponse>(data);
     } catch (error) {
       console.error('GoogleCalendarService.generateAuthorization error:', error);
       throw error;
@@ -39,7 +49,7 @@ const GoogleCalendarService = {
           state,
         }
       );
-      return data;
+      return unwrap<GoogleCalendarConnectionResponse>(data);
     } catch (error) {
       console.error('GoogleCalendarService.completeAuthorization error:', error);
       throw error;
@@ -54,7 +64,8 @@ const GoogleCalendarService = {
       const { data } = await api.get(
         `/agents/${agentId}/integrations/google-calendar/calendars`
       );
-      return data.calendars || [];
+      const inner = unwrap<{ calendars?: GoogleCalendarItem[] }>(data);
+      return inner.calendars || [];
     } catch (error) {
       console.error('GoogleCalendarService.getCalendars error:', error);
       throw error;
@@ -73,7 +84,7 @@ const GoogleCalendarService = {
         `/agents/${agentId}/integrations/google-calendar`,
         config
       );
-      return data;
+      return unwrap<{ success: boolean }>(data);
     } catch (error) {
       console.error('GoogleCalendarService.saveConfiguration error:', error);
       throw error;
@@ -88,7 +99,7 @@ const GoogleCalendarService = {
       const { data } = await api.delete(
         `/agents/${agentId}/integrations/google-calendar`
       );
-      return data;
+      return unwrap<{ success: boolean }>(data);
     } catch (error) {
       console.error('GoogleCalendarService.disconnect error:', error);
       throw error;
@@ -111,7 +122,7 @@ const GoogleCalendarService = {
         `/agents/${agentId}/integrations/google-calendar/availability`,
         params
       );
-      return data;
+      return unwrap<{ available: boolean; slots?: Array<{ start: string; end: string }> }>(data);
     } catch (error) {
       console.error('GoogleCalendarService.checkAvailability error:', error);
       throw error;
@@ -138,7 +149,7 @@ const GoogleCalendarService = {
         `/agents/${agentId}/integrations/google-calendar/events`,
         event
       );
-      return data;
+      return unwrap<{ success: boolean; eventId?: string; meetLink?: string }>(data);
     } catch (error) {
       console.error('GoogleCalendarService.createEvent error:', error);
       throw error;
