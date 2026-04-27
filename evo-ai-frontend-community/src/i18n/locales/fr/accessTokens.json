@@ -18,7 +18,8 @@
       "selectedCount": "{{count}} permission sélectionnée",
       "selectedCount_plural": "{{count}} permissions sélectionnées",
       "selectAll": "Tout Sélectionner",
-      "clearAll": "Tout Effacer"
+      "clearAll": "Tout Effacer",
+      "expiresAt": "Expire le"
     },
     "placeholders": {
       "name": "ex. Mon Jeton API",
@@ -26,7 +27,8 @@
     },
     "descriptions": {
       "name": "Nom descriptif pour identifier ce jeton d'accès",
-      "scopes": "Sélectionnez les permissions auxquelles ce jeton aura accès"
+      "scopes": "Sélectionnez les permissions auxquelles ce jeton aura accès",
+      "expiresAt": "Optionnel. Laisser vide pour un jeton qui n'expire jamais."
     }
   },
   "table": {
@@ -95,7 +97,9 @@
       "createdAt": "Créé le",
       "updatedAt": "Dernière mise à jour",
       "ownerId": "ID du Propriétaire",
-      "tokenId": "ID du Jeton"
+      "tokenId": "ID du Jeton",
+      "expiresAt": "Expire le",
+      "expiresNever": "N'expire jamais"
     },
     "copyToken": "Jeton d'Accès",
     "descriptions": {

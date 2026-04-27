@@ -125,7 +125,7 @@ export default function ViewTokenModal({
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Use this token in the Authorization header: <code>Authorization: Bearer {token.token.substring(0, 20)}...</code>
+              Use this token in the Authorization header: <code>Authorization: Bearer {token.token ? `${token.token.substring(0, 20)}...` : '••••...'}</code>
             </p>
           </div>
 
@@ -160,6 +160,14 @@ export default function ViewTokenModal({
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Last Updated</p>
                 <p className="text-sm">{new Date(token.updated_at).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{t('viewModal.labels.expiresAt')}</p>
+                <p className="text-sm">
+                  {token.expires_at
+                    ? new Date(token.expires_at).toLocaleString()
+                    : t('viewModal.labels.expiresNever')}
+                </p>
               </div>
             </div>
 

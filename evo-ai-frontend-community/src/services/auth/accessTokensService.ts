@@ -4,7 +4,6 @@ import type {
   AccessToken,
   AccessTokenFormData,
   AccessTokensResponse,
-  AccessTokenResponse,
 } from '@/types/auth';
 
 /**
@@ -23,9 +22,9 @@ export const getAccessTokens = async (params?: {
  * Get a specific Access Token by ID
  * Endpoint: GET /api/v1/access_tokens/:id
  */
-export const getAccessToken = async (id: string): Promise<AccessTokenResponse> => {
+export const getAccessToken = async (id: string): Promise<AccessToken> => {
   const response = await apiAuth.get(`/access_tokens/${id}`);
-  return extractData<any>(response);
+  return extractData<AccessToken>(response);
 };
 
 /**
@@ -34,11 +33,11 @@ export const getAccessToken = async (id: string): Promise<AccessTokenResponse> =
  */
 export const createAccessToken = async (
   data: AccessTokenFormData,
-): Promise<AccessTokenResponse> => {
+): Promise<AccessToken> => {
   const response = await apiAuth.post('/access_tokens', {
     access_token: data,
   });
-  return extractData<any>(response);
+  return extractData<AccessToken>(response);
 };
 
 /**
@@ -48,11 +47,11 @@ export const createAccessToken = async (
 export const updateAccessToken = async (
   id: string,
   data: Partial<AccessTokenFormData>,
-): Promise<AccessTokenResponse> => {
+): Promise<AccessToken> => {
   const response = await apiAuth.patch(`/access_tokens/${id}`, {
     access_token: data,
   });
-  return extractData<any>(response);
+  return extractData<AccessToken>(response);
 };
 
 /**
@@ -67,9 +66,9 @@ export const deleteAccessToken = async (id: string): Promise<void> => {
  * Regenerate the token value for an Access Token
  * Endpoint: PATCH /api/v1/access_tokens/:id/update_token
  */
-export const regenerateAccessToken = async (id: string): Promise<AccessTokenResponse> => {
+export const regenerateAccessToken = async (id: string): Promise<AccessToken> => {
   const response = await apiAuth.patch(`/access_tokens/${id}/update_token`);
-  return extractData<any>(response);
+  return extractData<AccessToken>(response);
 };
 
 /**

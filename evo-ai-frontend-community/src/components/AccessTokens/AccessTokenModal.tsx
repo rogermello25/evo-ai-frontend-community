@@ -41,6 +41,7 @@ export default function AccessTokenModal({
   const [formData, setFormData] = useState<AccessTokenFormData>({
     name: '',
     scopes: '',
+    expires_at: null,
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -117,12 +118,14 @@ export default function AccessTokenModal({
         setFormData({
           name: token.name,
           scopes: token.scopes,
+          expires_at: token.expires_at ? token.expires_at.slice(0, 16) : null,
         });
         setSelectedScopes(parseScopesFromAPI(token.scopes));
       } else {
         setFormData({
           name: generateNameSuggestion(),
           scopes: '',
+          expires_at: null,
         });
         setSelectedScopes([]);
       }
@@ -161,6 +164,9 @@ export default function AccessTokenModal({
     const submitData: AccessTokenFormData = {
       ...formData,
       scopes: formatScopesForAPI(selectedScopes),
+      expires_at: formData.expires_at && formData.expires_at.trim() !== ''
+        ? new Date(formData.expires_at).toISOString()
+        : null,
     };
 
     onSubmit(submitData);
@@ -238,6 +244,20 @@ export default function AccessTokenModal({
               )}
               <p className="text-sm text-muted-foreground">
                 {t('form.descriptions.name')}
+              </p>
+            </div>
+
+            {/* Expires At */}
+            <div className="space-y-2">
+              <UILabel htmlFor="expires_at">{t('form.labels.expiresAt')}</UILabel>
+              <Input
+                id="expires_at"
+                type="datetime-local"
+                value={formData.expires_at ?? ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, expires_at: e.target.value || null }))}
+              />
+              <p className="text-sm text-muted-foreground">
+                {t('form.descriptions.expiresAt')}
               </p>
             </div>
 

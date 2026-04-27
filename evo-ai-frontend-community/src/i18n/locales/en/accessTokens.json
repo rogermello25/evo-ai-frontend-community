@@ -18,7 +18,8 @@
       "selectedCount": "{{count}} permission selected",
       "selectedCount_plural": "{{count}} permissions selected",
       "selectAll": "Select All",
-      "clearAll": "Clear All"
+      "clearAll": "Clear All",
+      "expiresAt": "Expires At"
     },
     "placeholders": {
       "name": "e.g. My API Token",
@@ -26,7 +27,8 @@
     },
     "descriptions": {
       "name": "Descriptive name to identify this access token",
-      "scopes": "Select the permissions this token will have access to"
+      "scopes": "Select the permissions this token will have access to",
+      "expiresAt": "Optional. Leave blank for a token that never expires."
     }
   },
   "table": {
@@ -95,7 +97,9 @@
       "createdAt": "Created At",
       "updatedAt": "Last Updated",
       "ownerId": "Owner ID",
-      "tokenId": "Token ID"
+      "tokenId": "Token ID",
+      "expiresAt": "Expires At",
+      "expiresNever": "Never expires"
     },
     "copyToken": "Access Token",
     "descriptions": {
