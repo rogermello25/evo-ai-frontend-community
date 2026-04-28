@@ -36,9 +36,16 @@ const IntegrationsSection = ({
   const [showGoogleCalendarConfig, setShowGoogleCalendarConfig] = useState(false);
   const [showGoogleSheetsConfig, setShowGoogleSheetsConfig] = useState(false);
 
-  // Use custom hook for integrations status
-  const { credentialsConfigured, isCheckingIntegrations, isConnected, reloadConfigs } =
-    useIntegrations(agentId);
+  // Use custom hook for integrations status and fresh configs
+  const {
+    credentialsConfigured,
+    isCheckingIntegrations,
+    isConnected,
+    reloadConfigs,
+    elevenLabsConfig,
+    googleCalendarConfig,
+    googleSheetsConfig,
+  } = useIntegrations(agentId);
 
   // Integrações que sempre estão disponíveis (não dependem de OAuth global)
   const ALWAYS_AVAILABLE_INTEGRATIONS = ['elevenlabs', 'google-calendar', 'google-sheets'];
@@ -239,7 +246,8 @@ const IntegrationsSection = ({
         open={showElevenLabsConfig}
         onOpenChange={setShowElevenLabsConfig}
         initialConfig={
-          integrations.elevenlabs as
+          (elevenLabsConfig ??
+            integrations.elevenlabs) as
             | Partial<{
                 apiKey: string;
                 respondInAudio: 'when_client_asks' | 'always' | 'never';
@@ -280,7 +288,8 @@ const IntegrationsSection = ({
         onOpenChange={setShowGoogleCalendarConfig}
         agentId={agentId}
         initialConfig={
-          integrations['google-calendar'] as Parameters<
+          (googleCalendarConfig ??
+            integrations['google-calendar']) as Parameters<
             typeof GoogleCalendarConfigDialog
           >[0]['initialConfig']
         }
@@ -315,7 +324,8 @@ const IntegrationsSection = ({
         onOpenChange={setShowGoogleSheetsConfig}
         agentId={agentId}
         initialConfig={
-          integrations['google-sheets'] as Parameters<
+          (googleSheetsConfig ??
+            integrations['google-sheets']) as Parameters<
             typeof GoogleSheetsConfigDialog
           >[0]['initialConfig']
         }
