@@ -67,7 +67,10 @@ const GoogleCalendarService = {
       const { data } = await api.get(
         `/agents/${agentId}/integrations/google-calendar/calendars`
       );
-      const inner = unwrap<{ calendars?: GoogleCalendarItem[] }>(data);
+      // Processor returns success_response(data=[CalendarItem, ...]) — the data field
+      // is the array directly. unwrap() returns whatever is at .data.
+      const inner = unwrap<GoogleCalendarItem[] | { calendars?: GoogleCalendarItem[] }>(data);
+      if (Array.isArray(inner)) return inner;
       return inner.calendars || [];
     } catch (error) {
       console.error('GoogleCalendarService.getCalendars error:', error);
